@@ -1,0 +1,502 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-title: "Plus Jakarta Sans", var(--font-sans);
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+/* Base custom resets or visual enhancements */
+html {
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+  -webkit-text-size-adjust: 100%;
+  touch-action: pan-y;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+}
+
+#root {
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* Momentum scroll and custom scrollbar visibility on touch screens */
+.custom-scrollbar,
+.scrollbar-thin,
+.custom-horizontal-scrollbar,
+.overflow-y-auto,
+.overflow-x-auto {
+  -webkit-overflow-scrolling: touch !important; /* Smooth inertial scrolling on iOS Safari */
+}
+
+/* Custom scrollbar - standard & fallback */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(241, 245, 249, 0.3);
+  border-radius: 9999px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.35); /* Elegant semi-transparent violet matching system theme */
+  border-radius: 9999px;
+  border: 1.5px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.65);
+}
+
+/* High-contrast scrollbars for explicit custom-scrollbar & scrollbar-thin panels */
+.scrollbar-thin::-webkit-scrollbar,
+.custom-scrollbar::-webkit-scrollbar,
+.custom-horizontal-scrollbar::-webkit-scrollbar,
+.overflow-y-auto::-webkit-scrollbar,
+.overflow-x-auto::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+  display: block !important;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track,
+.custom-scrollbar::-webkit-scrollbar-track,
+.custom-horizontal-scrollbar::-webkit-scrollbar-track,
+.overflow-y-auto::-webkit-scrollbar-track,
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: rgba(241, 245, 249, 0.8) !important;
+  border-radius: 9999px !important;
+}
+
+.dark .scrollbar-thin::-webkit-scrollbar-track,
+.dark .custom-scrollbar::-webkit-scrollbar-track,
+.dark .custom-horizontal-scrollbar::-webkit-scrollbar-track,
+.dark .overflow-y-auto::-webkit-scrollbar-track,
+.dark .overflow-x-auto::-webkit-scrollbar-track {
+  background: rgba(30, 41, 59, 0.6) !important;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb,
+.custom-scrollbar::-webkit-scrollbar-thumb,
+.custom-horizontal-scrollbar::-webkit-scrollbar-thumb,
+.overflow-y-auto::-webkit-scrollbar-thumb,
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.6) !important; /* Higher contrast fuchsia/violet */
+  border-radius: 9999px !important;
+  border: 1.5px solid transparent !important;
+  background-clip: padding-box !important;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover,
+.custom-scrollbar::-webkit-scrollbar-thumb:hover,
+.custom-horizontal-scrollbar::-webkit-scrollbar-thumb:hover,
+.overflow-y-auto::-webkit-scrollbar-thumb:hover,
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.85) !important;
+}
+
+/* Force solid persistent scrollbars on mobile/touch screen devices to avoid auto-hiding */
+@media (max-width: 1024px) {
+  .scrollbar-thin::-webkit-scrollbar,
+  .custom-scrollbar::-webkit-scrollbar,
+  .custom-horizontal-scrollbar::-webkit-scrollbar,
+  .overflow-y-auto::-webkit-scrollbar,
+  .overflow-x-auto::-webkit-scrollbar {
+    width: 9px !important;
+    height: 9px !important;
+    display: block !important;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track,
+  .custom-scrollbar::-webkit-scrollbar-track,
+  .custom-horizontal-scrollbar::-webkit-scrollbar-track,
+  .overflow-y-auto::-webkit-scrollbar-track,
+  .overflow-x-auto::-webkit-scrollbar-track {
+    background: rgba(226, 232, 240, 0.9) !important; /* Solid light gray track for visual guidance */
+    border-radius: 9999px !important;
+  }
+
+  .dark .scrollbar-thin::-webkit-scrollbar-track,
+  .dark .custom-scrollbar::-webkit-scrollbar-track,
+  .dark .custom-horizontal-scrollbar::-webkit-scrollbar-track,
+  .dark .overflow-y-auto::-webkit-scrollbar-track,
+  .dark .overflow-x-auto::-webkit-scrollbar-track {
+    background: rgba(30, 41, 59, 0.9) !important; /* Solid dark gray track */
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb,
+  .custom-scrollbar::-webkit-scrollbar-thumb,
+  .custom-horizontal-scrollbar::-webkit-scrollbar-thumb,
+  .overflow-y-auto::-webkit-scrollbar-thumb,
+  .overflow-x-auto::-webkit-scrollbar-thumb {
+    background: rgba(139, 92, 246, 0.8) !important; /* Solid bright violet thumb */
+    border-radius: 9999px !important;
+    border: 2px solid #ffffff !important; /* White border to make it pop explicitly */
+    background-clip: border-box !important;
+  }
+
+  .dark .scrollbar-thin::-webkit-scrollbar-thumb,
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb,
+  .dark .custom-horizontal-scrollbar::-webkit-scrollbar-thumb,
+  .dark .overflow-y-auto::-webkit-scrollbar-thumb,
+  .dark .overflow-x-auto::-webkit-scrollbar-thumb {
+    background: rgba(167, 139, 250, 0.8) !important; /* Solid light violet thumb for dark mode */
+    border: 2px solid #0f172a !important; /* Dark border */
+    background-clip: border-box !important;
+  }
+}
+
+/* Class .force-scroll and .mobile-touch-scroll to enforce scroll visibility, momentum and touch performance */
+.force-scroll,
+.mobile-touch-scroll {
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior-y: auto !important;
+  touch-action: pan-y !important;
+}
+
+.mobile-horizontal-scroll {
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior-x: auto !important;
+  touch-action: pan-x !important;
+}
+
+.mobile-2d-scroll {
+  overflow: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: auto !important;
+  touch-action: auto !important;
+}
+
+/* Ensure scrollbars are always explicitly displayed and visible for .force-scroll */
+.force-scroll::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+  display: block !important;
+}
+
+.force-scroll::-webkit-scrollbar-track {
+  background: rgba(226, 232, 240, 0.9) !important; /* Visible light gray track */
+  border-radius: 9999px !important;
+}
+
+.dark .force-scroll::-webkit-scrollbar-track {
+  background: rgba(30, 41, 59, 0.9) !important; /* Visible dark gray track */
+}
+
+.force-scroll::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.85) !important; /* Strong violet thumb */
+  border-radius: 9999px !important;
+  border: 1.5px solid #ffffff !important;
+  background-clip: padding-box !important;
+}
+
+.dark .force-scroll::-webkit-scrollbar-thumb {
+  background: rgba(167, 139, 250, 0.85) !important; /* Light violet for dark mode */
+  border: 1.5px solid #0f172a !important;
+}
+
+.force-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 1) !important;
+}
+
+
+/* Custom springy interactive animations */
+@keyframes spring-in {
+  0% {
+    transform: translate3d(-50%, -100px, 0) scale(0.85);
+    opacity: 0;
+  }
+  60% {
+    transform: translate3d(-50%, 8px, 0) scale(1.05);
+    opacity: 0.95;
+  }
+  85% {
+    transform: translate3d(-50%, -4px, 0) scale(0.98);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0) scale(1);
+    opacity: 1;
+  }
+}
+
+.notification-bounce-in {
+  animation: spring-in 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* General springy card hover transition */
+.hover-bouncy {
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.hover-bouncy:hover {
+  box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.08), 0 8px 12px -5px rgba(99, 102, 241, 0.04);
+  border-color: rgba(139, 92, 246, 0.35) !important;
+}
+.hover-bouncy:active {
+  opacity: 0.95;
+}
+
+/* Special interactive effects for input fields and selections */
+.input-interactive {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.input-interactive:hover {
+  border-color: rgba(139, 92, 246, 0.45);
+}
+.input-interactive:focus {
+  border-color: rgba(139, 92, 246, 0.7);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+}
+
+/* Slow breath background glow for panels */
+@keyframes ambient-glow {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.45; }
+}
+
+.bg-glow-pulse {
+  position: relative;
+}
+.bg-glow-pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+  animation: ambient-glow 4s infinite ease-in-out;
+}
+
+/* Theme Colors for Medical Report */
+:root {
+  --report-text-color: #111827;
+  --report-heading-color: #0f172a;
+  --report-border-color: #e2e8f0;
+  --report-bg-hover: #f8fafc;
+}
+
+.dark, :root.dark {
+  --report-text-color: #f8fafc;
+  --report-heading-color: #ffffff;
+  --report-border-color: #1e293b;
+  --report-bg-hover: #0f172a;
+}
+
+/* Markdown Tables & Content Styling */
+.markdown-body {
+  font-family: "Times New Roman", Times, serif !important;
+  font-size: 13pt !important;
+  line-height: 1.6 !important;
+  color: var(--report-text-color) !important;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4 {
+  font-family: "Times New Roman", Times, serif !important;
+  font-weight: 700 !important;
+  color: var(--report-heading-color) !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 0.75rem !important;
+  letter-spacing: -0.015em !important;
+}
+
+.markdown-body h1 {
+  font-size: 16pt !important;
+}
+
+.markdown-body h2 {
+  font-size: 14pt !important;
+  border-bottom: 1px solid var(--report-border-color) !important;
+  padding-bottom: 0.5rem !important;
+}
+
+.markdown-body h3 {
+  font-size: 13.5pt !important;
+}
+
+.markdown-body h4 {
+  font-size: 13pt !important;
+}
+
+.markdown-body p,
+.markdown-body li,
+.markdown-body td,
+.markdown-body span:not(.high):not(.low) {
+  font-family: "Times New Roman", Times, serif !important;
+  font-size: 13pt !important;
+  line-height: 1.6 !important;
+  color: var(--report-text-color) !important;
+}
+
+.markdown-body strong,
+.markdown-body b {
+  font-weight: 700 !important;
+  color: var(--report-heading-color) !important;
+}
+
+.markdown-body p {
+  margin-bottom: 1rem;
+}
+
+.markdown-body ul, 
+.markdown-body ol {
+  margin-left: 1.25rem;
+  margin-bottom: 1rem;
+  list-style-type: disc;
+}
+
+.markdown-body li {
+  margin-bottom: 0.35rem;
+}
+
+/* Beautiful Table styling */
+.markdown-body table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin-top: 1.25rem !important;
+  margin-bottom: 1.25rem !important;
+  font-size: 13pt !important;
+  text-align: left !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  border: 1px solid var(--report-border-color) !important;
+}
+
+.markdown-body thead {
+  background-color: var(--report-bg-hover) !important;
+}
+
+.markdown-body th {
+  padding: 0.75rem 1rem !important;
+  font-weight: 700 !important;
+  color: var(--report-heading-color) !important;
+  border-bottom: 2px solid var(--report-border-color) !important;
+}
+
+.markdown-body td {
+  padding: 0.65rem 1rem !important;
+  border-bottom: 1px solid var(--report-border-color) !important;
+  color: var(--report-text-color) !important;
+}
+
+.markdown-body tr:last-child td {
+  border-bottom: none;
+}
+
+.markdown-body tr:hover {
+  background-color: var(--report-bg-hover) !important;
+}
+
+/* Custom scrollbar for horizontal tabs to be clearly visible and scrollable */
+.custom-horizontal-scrollbar {
+  overflow-x: auto !important;
+  scrollbar-width: auto !important;
+}
+
+.custom-horizontal-scrollbar::-webkit-scrollbar {
+  height: 8px !important;
+  display: block !important;
+}
+
+.custom-horizontal-scrollbar::-webkit-scrollbar-track {
+  background: rgba(241, 245, 249, 0.8) !important;
+  border-radius: 9999px !important;
+}
+
+.dark .custom-horizontal-scrollbar::-webkit-scrollbar-track {
+  background: rgba(30, 41, 59, 0.6) !important;
+}
+
+.custom-horizontal-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.5) !important; /* Elegant violet thumb */
+  border-radius: 9999px !important;
+  border: 1.5px solid transparent !important;
+}
+
+.custom-horizontal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.8) !important;
+}
+
+/* Zalo Chatbot Markdown Overrides */
+.chatbot-markdown {
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif !important;
+  font-size: 13.5px !important;
+  line-height: 1.5 !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.01em !important;
+}
+
+.chatbot-markdown p {
+  margin-bottom: 0.5rem !important;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif !important;
+  font-size: 13.5px !important;
+  line-height: 1.5 !important;
+}
+
+.chatbot-markdown p:last-child {
+  margin-bottom: 0 !important;
+}
+
+.chatbot-markdown ul, 
+.chatbot-markdown ol {
+  margin-left: 1rem !important;
+  margin-bottom: 0.5rem !important;
+  list-style-type: disc !important;
+}
+
+.chatbot-markdown li {
+  margin-bottom: 0.25rem !important;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif !important;
+  font-size: 13.5px !important;
+  line-height: 1.5 !important;
+}
+
+.chatbot-markdown strong {
+  font-weight: 700 !important;
+}
+
+.chatbot-markdown h1,
+.chatbot-markdown h2,
+.chatbot-markdown h3,
+.chatbot-markdown h4 {
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif !important;
+  font-weight: 700 !important;
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.25rem !important;
+  font-size: 14px !important;
+}
+
+
+
