@@ -1,16 +1,29 @@
-import * as pdfjsLib from "pdfjs-dist";
-import workerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
-
-if (typeof window !== "undefined") {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
-}
-
 /**
  * Converts a PDF (data URL or base64) into a crisp, high-resolution JPEG data URL
  * so that it can be reliably rendered in <img> tags, canvases, and iframes across all browsers.
+ * Uses dynamic import so pdfjs-dist is NEVER bundled into initial mobile page load!
  */
+
+let pdfjsModule: typeof import("pdfjs-dist") | null = null;
+
+async function loadPdfjs() {
+  if (!pdfjsModule) {
+    const [lib, workerMod] = await Promise.all([
+      import("pdfjs-dist"),
+      import("pdfjs-dist/build/pdf.worker.min.mjs?url")
+    ]);
+    if (typeof window !== "undefined") {
+      lib.GlobalWorkerOptions.workerSrc = workerMod.default;
+    }
+    pdfjsModule = lib;
+  }
+  return pdfjsModule;
+}
+
 export async function convertPdfToImageDataUrl(pdfDataOrBase64: string): Promise<string> {
   try {
+    const pdfjsLib = await loadPdfjs();
+
     let base64 = pdfDataOrBase64;
     if (base64.includes(",")) {
       base64 = base64.split(",")[1];

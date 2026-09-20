@@ -28,6 +28,7 @@ import {
   MessageSquare
 } from "lucide-react";
 import { convertPdfToImageDataUrl } from "./utils/pdfToImage";
+import { safeStorage, safeSessionStorage } from "./utils/safeStorage";
 
 let cachedOcrImageDataUrl: string | null = null;
 
@@ -58,8 +59,8 @@ export const App: React.FC = () => {
   const [darkMode, setDarkMode] = useState<boolean>(false);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("med_theme");
-    if (savedTheme === "dark" || (!savedTheme && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+    const savedTheme = safeStorage.getItem("med_theme");
+    if (savedTheme === "dark" || (!savedTheme && typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
       setDarkMode(true);
       document.documentElement.classList.add("dark");
     } else {
@@ -72,10 +73,10 @@ export const App: React.FC = () => {
     setDarkMode(dark);
     if (dark) {
       document.documentElement.classList.add("dark");
-      localStorage.setItem("med_theme", "dark");
+      safeStorage.setItem("med_theme", "dark");
     } else {
       document.documentElement.classList.remove("dark");
-      localStorage.setItem("med_theme", "light");
+      safeStorage.setItem("med_theme", "light");
     }
   };
 
@@ -90,11 +91,7 @@ export const App: React.FC = () => {
   const [ocrImageFile, setOcrImageFile] = useState<File | Blob | null>(null);
   const [ocrImageDataUrl, setOcrImageDataUrl] = useState<string | null>(() => {
     if (cachedOcrImageDataUrl) return cachedOcrImageDataUrl;
-    try {
-      return sessionStorage.getItem("med_last_ocr_image") || null;
-    } catch {
-      return null;
-    }
+    return safeSessionStorage.getItem("med_last_ocr_image");
   });
   const activeObjectUrlRef = useRef<string | null>(null);
   const [ocrDetails, setOcrDetails] = useState<Record<string, { rawVal?: string; rawUnit?: string; rawRefRange?: string; confidence?: "high" | "medium" | "low" }>>({});
@@ -125,24 +122,24 @@ export const App: React.FC = () => {
 
   // Load initial settings & history
   useEffect(() => {
-    const savedModel = localStorage.getItem("med_model");
+    const savedModel = safeStorage.getItem("med_model");
     if (savedModel) setModel(savedModel);
 
     const CURRENT_PROMPT_VERSION = "v5_complete_5_sections_with_investigations";
-    const savedPromptVersion = localStorage.getItem("med_prompt_version");
-    const savedPrompt = localStorage.getItem("med_prompt");
+    const savedPromptVersion = safeStorage.getItem("med_prompt_version");
+    const savedPrompt = safeStorage.getItem("med_prompt");
     if (savedPrompt && savedPromptVersion === CURRENT_PROMPT_VERSION) {
       setSystemPrompt(savedPrompt);
     } else {
       setSystemPrompt(SYS);
-      localStorage.setItem("med_prompt", SYS);
-      localStorage.setItem("med_prompt_version", CURRENT_PROMPT_VERSION);
+      safeStorage.setItem("med_prompt", SYS);
+      safeStorage.setItem("med_prompt_version", CURRENT_PROMPT_VERSION);
     }
 
-    const savedKey = localStorage.getItem("med_custom_key");
+    const savedKey = safeStorage.getItem("med_custom_key");
     if (savedKey) setCustomApiKey(savedKey);
 
-    const savedHistory = localStorage.getItem("med_history");
+    const savedHistory = safeStorage.getItem("med_history");
     if (savedHistory) {
       try {
         setHistory(JSON.parse(savedHistory));
@@ -164,9 +161,9 @@ export const App: React.FC = () => {
 
   // Save AI configuration
   const saveConfig = () => {
-    localStorage.setItem("med_model", model);
-    localStorage.setItem("med_prompt", systemPrompt);
-    localStorage.setItem("med_custom_key", customApiKey);
+    safeStorage.setItem("med_model", model);
+    safeStorage.setItem("med_prompt", systemPrompt);
+    safeStorage.setItem("med_custom_key", customApiKey);
 
     fetch("/api/health", {
       headers: {
@@ -219,7 +216,7 @@ export const App: React.FC = () => {
     }
     setOcrImageFile(null);
     cachedOcrImageDataUrl = null;
-    try { sessionStorage.removeItem("med_last_ocr_image"); } catch {}
+    safeSessionStorage.removeItem("med_last_ocr_image");
     setOcrImageDataUrl(null);
     setOcrDetails({});
     setActiveScanId(null);
@@ -324,12 +321,8 @@ export const App: React.FC = () => {
     }
 
     cachedOcrImageDataUrl = validSrc;
-    try {
-      if (validSrc && validSrc.length < 4500000) {
-        sessionStorage.setItem("med_last_ocr_image", validSrc);
-      }
-    } catch {
-      // Ignore sessionStorage quota error if image is very large
+    if (validSrc && validSrc.length < 4500000) {
+      safeSessionStorage.setItem("med_last_ocr_image", validSrc);
     }
 
     setOcrImageFile(fileOrBlob || null);
@@ -340,11 +333,9 @@ export const App: React.FC = () => {
         .then((converted) => {
           if (converted) {
             cachedOcrImageDataUrl = converted;
-            try {
-              if (converted.length < 4500000) {
-                sessionStorage.setItem("med_last_ocr_image", converted);
-              }
-            } catch {}
+            if (converted.length < 4500000) {
+              safeSessionStorage.setItem("med_last_ocr_image", converted);
+            }
             setOcrImageDataUrl(converted);
           }
         })
@@ -653,7 +644,7 @@ export const App: React.FC = () => {
 
       const updatedHistory = [newRecord, ...history];
       setHistory(updatedHistory);
-      localStorage.setItem("med_history", JSON.stringify(updatedHistory));
+      safeStorage.setItem("med_history", JSON.stringify(updatedHistory));
       triggerAlert("success", "Báo cáo tư vấn sức khỏe lâm sàng đã được tạo thành công!");
     } catch (err: any) {
       triggerAlert("error", err.message || "Gặp sự cố kết nối với AI.");
@@ -665,7 +656,7 @@ export const App: React.FC = () => {
   // Clear history completely
   const clearHistory = () => {
     setHistory([]);
-    localStorage.removeItem("med_history");
+    safeStorage.removeItem("med_history");
     setSelectedHistory(null);
     triggerAlert("info", "Đã xóa toàn bộ lịch sử tư vấn.");
   };
@@ -706,7 +697,7 @@ export const App: React.FC = () => {
     }
     setOcrImageFile(null);
     cachedOcrImageDataUrl = null;
-    try { sessionStorage.removeItem("med_last_ocr_image"); } catch {}
+    safeSessionStorage.removeItem("med_last_ocr_image");
     setOcrImageDataUrl(null);
     setOcrDetails({});
     setActiveScanId(null);
@@ -801,11 +792,9 @@ export const App: React.FC = () => {
 
   const handleUpdateImageDataUrl = (newUrl: string) => {
     cachedOcrImageDataUrl = newUrl;
-    try {
-      if (newUrl && newUrl.length < 4500000) {
-        sessionStorage.setItem("med_last_ocr_image", newUrl);
-      }
-    } catch {}
+    if (newUrl && newUrl.length < 4500000) {
+      safeSessionStorage.setItem("med_last_ocr_image", newUrl);
+    }
     setOcrImageDataUrl(newUrl);
   };
 

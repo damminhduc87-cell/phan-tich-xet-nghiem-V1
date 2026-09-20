@@ -46,6 +46,7 @@ import {
 import { LabCropPreview } from "../common/LabCropPreview";
 import { PenTool } from "lucide-react";
 import { convertPdfToImageDataUrl } from "../../utils/pdfToImage";
+import { safeSessionStorage } from "../../utils/safeStorage";
 
 export type Step3Filter = 
   | "all" 
@@ -236,12 +237,10 @@ export const Step3DataVerification: React.FC<Step3DataVerificationProps> = ({
   const handleRetryImageLoad = () => {
     setImageLoadError(false);
     if (!ocrImageDataUrl && onUpdateImageDataUrl) {
-      try {
-        const cached = sessionStorage.getItem("med_last_ocr_image");
-        if (cached) {
-          onUpdateImageDataUrl(cached);
-        }
-      } catch {}
+      const cached = safeSessionStorage.getItem("med_last_ocr_image");
+      if (cached) {
+        onUpdateImageDataUrl(cached);
+      }
     } else if (ocrImageDataUrl && ocrImageDataUrl.includes("application/pdf")) {
       setIsConvertingPdf(true);
       convertPdfToImageDataUrl(ocrImageDataUrl)
