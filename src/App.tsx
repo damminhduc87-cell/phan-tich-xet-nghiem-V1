@@ -1091,10 +1091,10 @@ export const App: React.FC = () => {
         isOpen={isReportModalOpen}
         onClose={() => setIsReportModalOpen(false)}
         isLoading={isAnalyzeLoading}
-        report={selectedHistory ? selectedHistory.reportContent : report}
-        patient={selectedHistory ? selectedHistory.patient : patient}
-        vals={selectedHistory ? selectedHistory.vals : vals}
-        model={selectedHistory ? selectedHistory.model : model}
+        report={selectedHistory ? (selectedHistory.reportContent || "") : (report || "")}
+        patient={(selectedHistory ? selectedHistory.patient : patient) || patient}
+        vals={(selectedHistory ? selectedHistory.vals : vals) || {}}
+        model={selectedHistory ? (selectedHistory.model || model) : model}
       />
 
       {/* AI Assistant Chatbot Dialog & Floating Corner Widget (Zalo style) */}

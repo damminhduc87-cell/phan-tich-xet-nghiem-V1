@@ -26,13 +26,14 @@ export const ReportModal: React.FC<ReportModalProps> = ({
   isOpen,
   onClose,
   isLoading,
-  report,
+  report = "",
   patient,
-  vals,
+  vals = {},
   model,
 }) => {
   const [copied, setCopied] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isSharing, setIsSharing] = useState(false);
 
   useEffect(() => {
     if (copied) {
@@ -42,54 +43,69 @@ export const ReportModal: React.FC<ReportModalProps> = ({
   }, [copied]);
 
   const normalizedReport = useMemo(() => {
-    return normalizeMarkdown(report);
+    if (!report) return "";
+    try {
+      return normalizeMarkdown(report);
+    } catch (e) {
+      console.warn("normalizeMarkdown error:", e);
+      return report;
+    }
   }, [report]);
 
   const abnormals = useMemo(() => {
-    return Object.entries(vals)
-      .filter(([_, val]) => val && val.trim() !== "")
-      .map(([id, val]) => {
-        const metric = GROUPS.flatMap((g) => g.metrics).find((m) => m.id === id);
-        if (!metric) return null;
-        const status = evaluateMetricStatus(metric.min, metric.max, val, metric.id);
-        const isPos = isQualitativePositive(val);
-        const isTra = isQualitativeTrace(val);
-        const isNeg = isQualitativeNegative(val);
+    if (!vals || typeof vals !== "object") return [];
+    try {
+      return Object.entries(vals)
+        .filter(([_, val]) => val !== undefined && val !== null && String(val).trim() !== "")
+        .map(([id, val]) => {
+          const valStr = String(val).trim();
+          const metric = GROUPS.flatMap((g) => g.metrics).find((m) => m.id === id);
+          if (!metric) return null;
+          const status = evaluateMetricStatus(metric.min, metric.max, valStr, metric.id);
+          const isPos = isQualitativePositive(valStr);
+          const isTra = isQualitativeTrace(valStr);
+          const isNeg = isQualitativeNegative(valStr);
 
-        const isHigh = status === "high";
-        const isLow = status === "low";
-        const isTrace = status === "trace";
+          const isHigh = status === "high";
+          const isLow = status === "low";
+          const isTrace = status === "trace";
 
-        let displayStatus = "Bình thường ✅";
-        if (isPos) displayStatus = "Dương tính 🔴";
-        else if (isHigh) displayStatus = "Cao ⬆️";
-        else if (isLow) displayStatus = "Thấp ⬇️";
-        else if (isTra) displayStatus = "Vết 🟡";
-        else if (isNeg) displayStatus = "Âm tính 🟢";
+          let displayStatus = "Bình thường ✅";
+          if (isPos) displayStatus = "Dương tính 🔴";
+          else if (isHigh) displayStatus = "Cao ⬆️";
+          else if (isLow) displayStatus = "Thấp ⬇️";
+          else if (isTra) displayStatus = "Vết 🟡";
+          else if (isNeg) displayStatus = "Âm tính 🟢";
 
-        return {
-          id,
-          name: metric.name.split(" (")[0],
-          val: isNeg ? "Âm tính" : val,
-          unit: metric.unit,
-          isHigh,
-          isLow,
-          isTrace,
-          displayStatus,
-          status: isHigh ? "high" : isLow ? "low" : isTrace ? "trace" : "normal",
-        };
-      })
-      .filter((m) => m !== null && (m.isHigh || m.isLow || m.isTrace)) as Array<{
-      id: string;
-      name: string;
-      val: string;
-      unit: string;
-      isHigh: boolean;
-      isLow: boolean;
-      isTrace: boolean;
-      displayStatus: string;
-      status: "high" | "low" | "trace" | "normal";
-    }>;
+          const metricName = metric?.name ? metric.name.split(" (")[0] : id;
+
+          return {
+            id,
+            name: metricName,
+            val: isNeg ? "Âm tính" : valStr,
+            unit: metric?.unit || "",
+            isHigh,
+            isLow,
+            isTrace,
+            displayStatus,
+            status: isHigh ? "high" : isLow ? "low" : isTrace ? "trace" : "normal",
+          };
+        })
+        .filter((m) => m !== null && (m.isHigh || m.isLow || m.isTrace)) as Array<{
+        id: string;
+        name: string;
+        val: string;
+        unit: string;
+        isHigh: boolean;
+        isLow: boolean;
+        isTrace: boolean;
+        displayStatus: string;
+        status: "high" | "low" | "trace" | "normal";
+      }>;
+    } catch (err) {
+      console.warn("Error calculating abnormals in ReportModal:", err);
+      return [];
+    }
   }, [vals]);
 
   const highCount = abnormals.filter((a) => a.isHigh || a.status === "high").length;
@@ -117,7 +133,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
   };
 
   const handleCopy = () => {
-    const textToCopy = normalizedReport || report;
+    const textToCopy = normalizedReport || report || "";
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(textToCopy)
         .then(() => {
@@ -132,15 +148,15 @@ export const ReportModal: React.FC<ReportModalProps> = ({
     }
   };
 
-  const [isSharing, setIsSharing] = useState(false);
   const handleShare = async () => {
-    const textContent = `${patient.ten ? `BỆNH NHÂN: ${patient.ten} (${patient.tuoi || "?"} tuổi, ${patient.gt === "nam" ? "Nam" : "Nữ"})\n\n` : ""}BÁO CÁO TƯ VẤN XÉT NGHIỆM AI:\n\n${normalizedReport || report}`;
+    const safePatient = patient || ({} as PatientInfo);
+    const textContent = `${safePatient.ten ? `BỆNH NHÂN: ${safePatient.ten} (${safePatient.tuoi || "?"} tuổi, ${safePatient.gt === "nam" ? "Nam" : "Nữ"})\n\n` : ""}BÁO CÁO TƯ VẤN XÉT NGHIỆM AI:\n\n${normalizedReport || report}`;
     
     if (navigator.share) {
       try {
         setIsSharing(true);
         await navigator.share({
-          title: `Báo cáo y khoa - ${patient.ten || "Bệnh nhân"}`,
+          title: `Báo cáo y khoa - ${safePatient.ten || "Bệnh nhân"}`,
           text: textContent,
         });
       } catch (err: any) {
@@ -162,7 +178,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
         <head>
           <meta charset="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <title>Báo cáo tư vấn sức khỏe AI - ${patient.ten || "Bệnh nhân"}</title>
+          <title>Báo cáo tư vấn sức khỏe AI - ${patient?.ten || "Bệnh nhân"}</title>
           <style>
             @page { size: A4 portrait; margin: 15mm 15mm 15mm 15mm; }
             body { font-family: 'Times New Roman', Times, serif; padding: 25px; color: #000; line-height: 1.5; font-size: 13pt; margin: 0; background: #fff; }
@@ -198,8 +214,8 @@ export const ReportModal: React.FC<ReportModalProps> = ({
         <body>
           <h1>PHIẾU BIỆN LUẬN KẾT QUẢ XÉT NGHIỆM TÍCH HỢP ĐÔNG - TÂY Y</h1>
           <div class="meta">
-            <p><strong>Bệnh nhân:</strong> ${patient.ten || "Chưa nhập"} | <strong>Tuổi:</strong> ${patient.tuoi || "Chưa nhập"} | <strong>Giới tính:</strong> ${patient.gt === "nam" ? "Nam" : "Nữ"}</p>
-            <p><strong>Khoa phòng:</strong> ${patient.khoa || "Khám bệnh"} | <strong>Giường:</strong> ${patient.giuong || "Không có"}</p>
+            <p><strong>Bệnh nhân:</strong> ${patient?.ten || "Chưa nhập"} | <strong>Tuổi:</strong> ${patient?.tuoi || "Chưa nhập"} | <strong>Giới tính:</strong> ${patient?.gt === "nam" ? "Nam" : "Nữ"}</p>
+            <p><strong>Khoa phòng:</strong> ${patient?.khoa || "Khám bệnh"} | <strong>Giường:</strong> ${patient?.giuong || "Không có"}</p>
             <p><strong>Ngày tạo:</strong> ${new Date().toLocaleString("vi-VN")}</p>
           </div>
           <h2>BẢN TIN CHỈ SỐ LÂM SÀNG GHI NHẬN:</h2>
@@ -240,7 +256,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `Bao-cao-xet-nghiem-${patient.ten ? patient.ten.replace(/\s+/g, "_") : "benh-nhan"}.html`;
+    link.download = `Bao-cao-xet-nghiem-${patient?.ten ? patient.ten.replace(/\s+/g, "_") : "benh-nhan"}.html`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

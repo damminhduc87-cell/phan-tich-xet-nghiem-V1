@@ -60,11 +60,13 @@ export const Step5ReportAnalysis: React.FC<Step5ReportAnalysisProps> = ({
   const [activeTab, setActiveTab] = useState<"current" | "history">("current");
   const [showDataSummary, setShowDataSummary] = useState<boolean>(false);
 
-  const currentDisplayReport = selectedHistory ? selectedHistory.reportContent : report;
-  const currentDisplayPatient = selectedHistory ? selectedHistory.patient : patient;
-  const currentDisplayVals = selectedHistory ? selectedHistory.vals : vals;
+  const currentDisplayReport = selectedHistory ? (selectedHistory.reportContent || "") : (report || "");
+  const currentDisplayPatient = (selectedHistory ? selectedHistory.patient : patient) || ({} as PatientInfo);
+  const currentDisplayVals = (selectedHistory ? selectedHistory.vals : vals) || {};
 
-  const metricEntries = Object.entries(currentDisplayVals).filter(([_, v]) => v !== undefined && v !== "");
+  const metricEntries = Object.entries(currentDisplayVals).filter(
+    ([_, v]) => v !== undefined && v !== null && String(v).trim() !== ""
+  );
 
   return (
     <div className="space-y-6 animate-fade-in" id="wizard_step_5">
@@ -300,8 +302,9 @@ export const Step5ReportAnalysis: React.FC<Step5ReportAnalysisProps> = ({
                       <div className="p-4 bg-slate-50 dark:bg-slate-950/50 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2.5 animate-fade-in">
                         <div className="flex flex-wrap gap-2">
                           {metricEntries.map(([id, val]) => {
+                            const valStr = String(val ?? "").trim();
                             const match = GROUPS.flatMap((g) => g.metrics).find((m) => m.id === id);
-                            const status = match ? evaluateMetricStatus(match.min, match.max, val, id) : "normal";
+                            const status = match ? evaluateMetricStatus(match.min, match.max, valStr, id) : "normal";
 
                             return (
                               <span
@@ -314,7 +317,7 @@ export const Step5ReportAnalysis: React.FC<Step5ReportAnalysisProps> = ({
                                   "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400"
                                 }`}
                               >
-                                {id}: {val} {match?.unit} {status === "high" ? "⬆️" : status === "low" ? "⬇️" : "✅"}
+                                {id}: {valStr} {match?.unit || ""} {status === "high" ? "⬆️" : status === "low" ? "⬇️" : "✅"}
                               </span>
                             );
                           })}
@@ -378,38 +381,41 @@ export const Step5ReportAnalysis: React.FC<Step5ReportAnalysisProps> = ({
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[460px] overflow-y-auto pr-1 scrollbar-thin force-scroll">
-                  {history.map((rec) => (
-                    <div
-                      key={rec.id}
-                      onClick={() => {
-                        setSelectedHistory(rec);
-                      }}
-                      className="p-4 border border-slate-150 dark:border-slate-800 rounded-2xl hover:border-violet-500 hover:bg-violet-50/20 dark:hover:bg-violet-950/20 cursor-pointer transition-all flex flex-col justify-between gap-3 group"
-                    >
-                      <div className="space-y-1">
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold text-slate-900 dark:text-white font-title group-hover:text-violet-600 dark:group-hover:text-violet-400">
-                            {rec.patient.ten || "Bệnh nhân ẩn danh"}
+                  {history.map((rec) => {
+                    const recPat = rec?.patient || ({} as PatientInfo);
+                    return (
+                      <div
+                        key={rec.id || Math.random().toString()}
+                        onClick={() => {
+                          setSelectedHistory(rec);
+                        }}
+                        className="p-4 border border-slate-150 dark:border-slate-800 rounded-2xl hover:border-violet-500 hover:bg-violet-50/20 dark:hover:bg-violet-950/20 cursor-pointer transition-all flex flex-col justify-between gap-3 group"
+                      >
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold text-slate-900 dark:text-white font-title group-hover:text-violet-600 dark:group-hover:text-violet-400">
+                              {recPat.ten || "Bệnh nhân ẩn danh"}
+                            </span>
+                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold">
+                              {recPat.tuoi ? `${recPat.tuoi}t` : "?"} • {recPat.gt === "nam" ? "Nam" : "Nữ"}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1">
+                            {recPat.chanDoan ? `Chẩn đoán: ${recPat.chanDoan}` : "Không ghi chẩn đoán sơ bộ"}
+                          </p>
+                        </div>
+
+                        <div className="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-100 dark:border-slate-800/80">
+                          <span className="flex items-center gap-1">
+                            <Clock className="h-3 w-3" /> {rec.date || ""}
                           </span>
-                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold">
-                            {rec.patient.tuoi ? `${rec.patient.tuoi}t` : "?"} • {rec.patient.gt === "nam" ? "Nam" : "Nữ"}
+                          <span className="text-violet-500 font-semibold group-hover:underline">
+                            Xem báo cáo ➔
                           </span>
                         </div>
-                        <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1">
-                          {rec.patient.chanDoan ? `Chẩn đoán: ${rec.patient.chanDoan}` : "Không ghi chẩn đoán sơ bộ"}
-                        </p>
                       </div>
-
-                      <div className="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-100 dark:border-slate-800/80">
-                        <span className="flex items-center gap-1">
-                          <Clock className="h-3 w-3" /> {rec.date}
-                        </span>
-                        <span className="text-violet-500 font-semibold group-hover:underline">
-                          Xem báo cáo ➔
-                        </span>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -428,17 +434,17 @@ export const Step5ReportAnalysis: React.FC<Step5ReportAnalysisProps> = ({
                   <span>Quay lại danh sách lịch sử</span>
                 </button>
                 <span className="text-[11px] text-slate-400 flex items-center gap-1">
-                  <Clock className="h-3 w-3" /> {selectedHistory.date}
+                  <Clock className="h-3 w-3" /> {selectedHistory.date || ""}
                 </span>
               </div>
 
               <div className="p-4 bg-slate-50/50 dark:bg-slate-950/40 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center justify-between">
                 <div>
                   <h4 className="text-xs font-bold text-slate-900 dark:text-white">
-                    Bệnh nhân: {selectedHistory.patient.ten || "Ẩn danh"} ({selectedHistory.patient.tuoi || "?"} tuổi, {selectedHistory.patient.gt === "nam" ? "Nam" : "Nữ"})
+                    Bệnh nhân: {selectedHistory.patient?.ten || "Ẩn danh"} ({selectedHistory.patient?.tuoi || "?"} tuổi, {selectedHistory.patient?.gt === "nam" ? "Nam" : "Nữ"})
                   </h4>
                   <p className="text-[11px] text-slate-400">
-                    Đã điền {Object.keys(selectedHistory.vals).length} chỉ số • Mô hình: {selectedHistory.model}
+                    Đã điền {Object.keys(selectedHistory.vals || {}).length} chỉ số • Mô hình: {selectedHistory.model || ""}
                   </p>
                 </div>
                 <button
@@ -464,7 +470,7 @@ export const Step5ReportAnalysis: React.FC<Step5ReportAnalysisProps> = ({
                     )
                   }}
                 >
-                  {selectedHistory.reportContent}
+                  {selectedHistory?.reportContent || ""}
                 </ReactMarkdown>
               </div>
             </div>
