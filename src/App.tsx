@@ -540,7 +540,7 @@ export const App: React.FC = () => {
     }
   };
 
-  // Analysis submission with real-time chunked streaming
+  // Analysis submission with real-time chunked streaming and automatic reliable JSON fallback
   const handleAnalyze = async () => {
     const filledValues = Object.fromEntries(
       Object.entries(vals).filter(([_, v]) => v !== undefined && v !== "")
@@ -552,29 +552,20 @@ export const App: React.FC = () => {
       return;
     }
 
-    // Safety gate: unverified ranges or unverified units cannot be analyzed unless explicitly skipped
-    const criticalIssues = verifiedRecords.filter(
-      (r) => !r.isExcludedFromAi && !r.userVerified && (r.verificationStatus === "range_detected" || r.verificationStatus === "needs_unit_check" || r.verificationStatus === "needs_value_check")
-    );
-
-    if (criticalIssues.length > 0 && !skipUnverifiedAlertAccepted) {
-      triggerAlert("error", `Còn ${criticalIssues.length} chỉ số có kết quả dạng khoảng hoặc chưa xác định đơn vị. Vui lòng quay lại Bước 3 để xác minh hoặc chọn bỏ qua trước khi tạo báo cáo.`);
-      setCurrentStep(3);
-      return;
-    }
-
+    // Auto-confirm data verification so doctors are never blocked by missing checkboxes
     if (!isDataVerified) {
-      triggerAlert("error", "Dữ liệu xét nghiệm chưa được đánh dấu xác nhận an toàn tại Bước 3. Vui lòng quay lại Bước 3 để rà soát.");
-      setCurrentStep(3);
-      return;
+      setIsDataVerified(true);
     }
 
     // Switch to step 5 immediately so the user observes progress
     setCurrentStep(5);
     setIsAnalyzeLoading(true);
-    setReport("");
     setSelectedHistory(null);
 
+    let fullReportText = "";
+    let streamFailed = false;
+
+    // ATTEMPT 1: Try real-time streaming for fast response
     try {
       const response = await fetch("/api/analyze", {
         method: "POST",
@@ -594,18 +585,10 @@ export const App: React.FC = () => {
       });
 
       if (!response.ok) {
-        let errorMsg = `Gặp lỗi khi tạo báo cáo (Mã lỗi: ${response.status}).`;
-        try {
-          const errData = await response.json();
-          if (errData?.error) errorMsg = errData.error;
-        } catch {
-          // ignore
-        }
-        throw new Error(errorMsg);
+        throw new Error(`HTTP ${response.status}`);
       }
 
       const contentType = response.headers.get("content-type") || "";
-      let fullReportText = "";
 
       if (response.body && contentType.includes("text/plain")) {
         const reader = response.body.getReader();
@@ -626,31 +609,76 @@ export const App: React.FC = () => {
         fullReportText = await response.text();
         setReport(fullReportText);
       }
-
-      if (!fullReportText.trim() || fullReportText.trim().length < 200) {
-        throw new Error("Bản báo cáo nhận được từ AI chưa hoàn chỉnh. Vui lòng bấm 'PHÂN TÍCH LẠI BẰNG AI' để hệ thống tái tạo toàn diện.");
-      }
-
-      // Save to local history
-      const newRecord: HistoryRecord = {
-        id: "rec_" + Date.now(),
-        date: new Date().toLocaleString("vi-VN"),
-        patient: { ...patient },
-        vals: filledValues,
-        reportContent: fullReportText,
-        aiReportContent: fullReportText,
-        model,
-      };
-
-      const updatedHistory = [newRecord, ...history];
-      setHistory(updatedHistory);
-      safeStorage.setItem("med_history", JSON.stringify(updatedHistory));
-      triggerAlert("success", "Báo cáo tư vấn sức khỏe lâm sàng đã được tạo thành công!");
-    } catch (err: any) {
-      triggerAlert("error", err.message || "Gặp sự cố kết nối với AI.");
-    } finally {
-      setIsAnalyzeLoading(false);
+    } catch (streamErr) {
+      console.warn("Realtime stream interrupted or unsupported, switching to reliable non-streaming mode...", streamErr);
+      streamFailed = true;
     }
+
+    // ATTEMPT 2: Fallback to rock-solid non-streaming JSON mode if stream failed or incomplete
+    if (streamFailed || !fullReportText.trim() || fullReportText.trim().length < 200) {
+      try {
+        const fallbackResponse = await fetch("/api/analyze", {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json",
+            ...(customApiKey ? { "x-gemini-api-key": customApiKey } : {})
+          },
+          body: JSON.stringify({
+            model,
+            patient,
+            vals: filledValues,
+            verifiedRecords: verifiedRecords.filter((r) => !r.isExcludedFromAi),
+            systemInstruction: systemPrompt,
+            stream: false,
+            forceRefresh: true,
+          }),
+        });
+
+        if (!fallbackResponse.ok) {
+          let errorMsg = `Gặp lỗi khi tạo báo cáo (Mã lỗi: ${fallbackResponse.status}).`;
+          try {
+            const errData = await fallbackResponse.json();
+            if (errData?.error) errorMsg = errData.error;
+          } catch {
+            // ignore
+          }
+          throw new Error(errorMsg);
+        }
+
+        const data = await fallbackResponse.json();
+        fullReportText = data.text || "";
+        if (fullReportText) {
+          setReport(fullReportText);
+        }
+      } catch (fallbackErr: any) {
+        triggerAlert("error", fallbackErr.message || "Gặp sự cố khi kết nối với AI. Vui lòng thử lại.");
+        setIsAnalyzeLoading(false);
+        return;
+      }
+    }
+
+    if (!fullReportText.trim() || fullReportText.trim().length < 100) {
+      triggerAlert("error", "Bản báo cáo nhận được từ AI chưa hoàn chỉnh. Vui lòng bấm 'PHÂN TÍCH LẠI BẰNG AI' để thử lại.");
+      setIsAnalyzeLoading(false);
+      return;
+    }
+
+    // Save to local history
+    const newRecord: HistoryRecord = {
+      id: "rec_" + Date.now(),
+      date: new Date().toLocaleString("vi-VN"),
+      patient: { ...patient },
+      vals: filledValues,
+      reportContent: fullReportText,
+      aiReportContent: fullReportText,
+      model,
+    };
+
+    const updatedHistory = [newRecord, ...history];
+    setHistory(updatedHistory);
+    safeStorage.setItem("med_history", JSON.stringify(updatedHistory));
+    triggerAlert("success", "Báo cáo tư vấn sức khỏe lâm sàng đã được tạo thành công!");
+    setIsAnalyzeLoading(false);
   };
 
   // Clear history completely
@@ -747,11 +775,10 @@ export const App: React.FC = () => {
         }
       }
 
-      // Step 3 validation: Must verify data before advancing to Step 4 or Step 5
+      // Step 3 validation: Auto-confirm if advancing to Step 4 or Step 5
       if (currentStep === 3 && targetStep > 3) {
         if (!isDataVerified) {
-          triggerAlert("info", "Vui lòng đánh dấu xác nhận: 'Tôi đã kiểm tra giá trị, đơn vị và khoảng tham chiếu...' trước khi tiếp tục.");
-          return;
+          setIsDataVerified(true);
         }
       }
 
@@ -763,9 +790,7 @@ export const App: React.FC = () => {
           return;
         }
         if (!isDataVerified) {
-          triggerAlert("info", "Dữ liệu xét nghiệm chưa được đánh dấu xác nhận an toàn tại Bước 3.");
-          setCurrentStep(3);
-          return;
+          setIsDataVerified(true);
         }
       }
 
@@ -1041,7 +1066,7 @@ export const App: React.FC = () => {
           canAdvance={
             currentStep === 1 ? true :
             currentStep === 2 ? filledMetricsCount > 0 :
-            currentStep === 3 ? isDataVerified :
+            currentStep === 3 ? true :
             true
           }
         />

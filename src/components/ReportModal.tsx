@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { X, Sparkles, Copy, Check, Printer, Maximize2, Minimize2, FileText, Activity, AlertTriangle, ArrowUp, ArrowDown } from "lucide-react";
+import { X, Sparkles, Copy, Check, Printer, Maximize2, Minimize2, FileText, Activity, AlertTriangle, ArrowUp, ArrowDown, Share2, Download } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { GROUPS } from "../data/groupsData";
@@ -98,54 +98,101 @@ export const ReportModal: React.FC<ReportModalProps> = ({
 
   if (!isOpen) return null;
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(normalizedReport || report);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const fallbackCopyText = (text: string) => {
+    try {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (e) {
+      console.warn("Clipboard fallback error", e);
+    }
   };
 
-  const handlePrint = () => {
-    const printWindow = window.open("", "_blank");
-    if (!printWindow) return;
+  const handleCopy = () => {
+    const textToCopy = normalizedReport || report;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(textToCopy)
+        .then(() => {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
+        })
+        .catch(() => {
+          fallbackCopyText(textToCopy);
+        });
+    } else {
+      fallbackCopyText(textToCopy);
+    }
+  };
+
+  const [isSharing, setIsSharing] = useState(false);
+  const handleShare = async () => {
+    const textContent = `${patient.ten ? `BỆNH NHÂN: ${patient.ten} (${patient.tuoi || "?"} tuổi, ${patient.gt === "nam" ? "Nam" : "Nữ"})\n\n` : ""}BÁO CÁO TƯ VẤN XÉT NGHIỆM AI:\n\n${normalizedReport || report}`;
+    
+    if (navigator.share) {
+      try {
+        setIsSharing(true);
+        await navigator.share({
+          title: `Báo cáo y khoa - ${patient.ten || "Bệnh nhân"}`,
+          text: textContent,
+        });
+      } catch (err: any) {
+        if (err.name !== "AbortError") {
+          handleCopy();
+        }
+      } finally {
+        setIsSharing(false);
+      }
+    } else {
+      handleCopy();
+    }
+  };
+
+  const getFullPrintableHtml = () => {
     const printContent = document.getElementById("report-print-area")?.innerHTML || "";
-    printWindow.document.write(`
+    return `<!DOCTYPE html>
       <html>
         <head>
+          <meta charset="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <title>Báo cáo tư vấn sức khỏe AI - ${patient.ten || "Bệnh nhân"}</title>
           <style>
-            body { font-family: 'Times New Roman', Times, serif; padding: 40px; color: #000; line-height: 1.5; font-size: 13pt; }
-            h1 { font-family: 'Times New Roman', Times, serif; font-size: 16pt; color: #000; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; font-weight: bold; text-align: center; }
-            h2 { font-family: 'Times New Roman', Times, serif; font-size: 14pt; color: #000; margin-top: 25px; margin-bottom: 10px; font-weight: bold; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
-            h3 { font-family: 'Times New Roman', Times, serif; font-size: 13.5pt; color: #000; margin-top: 20px; margin-bottom: 8px; font-weight: bold; }
-            h4 { font-family: 'Times New Roman', Times, serif; font-size: 13pt; color: #000; margin-top: 15px; margin-bottom: 5px; font-weight: bold; }
+            @page { size: A4 portrait; margin: 15mm 15mm 15mm 15mm; }
+            body { font-family: 'Times New Roman', Times, serif; padding: 25px; color: #000; line-height: 1.5; font-size: 13pt; margin: 0; background: #fff; }
+            h1 { font-family: 'Times New Roman', Times, serif; font-size: 16pt; color: #000; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 16px; font-weight: bold; text-align: center; }
+            h2 { font-family: 'Times New Roman', Times, serif; font-size: 14pt; color: #000; margin-top: 20px; margin-bottom: 8px; font-weight: bold; border-bottom: 1px solid #ccc; padding-bottom: 4px; }
+            h3 { font-family: 'Times New Roman', Times, serif; font-size: 13.5pt; color: #000; margin-top: 16px; margin-bottom: 6px; font-weight: bold; }
+            h4 { font-family: 'Times New Roman', Times, serif; font-size: 13pt; color: #000; margin-top: 14px; margin-bottom: 4px; font-weight: bold; }
             p, li, td { font-family: 'Times New Roman', Times, serif; font-size: 13pt; line-height: 1.5; color: #000; }
             ul, ol { margin-left: 20px; margin-bottom: 10px; }
-            li { margin-bottom: 5px; }
-            .meta { background: #f9fafb; padding: 15px; border-radius: 8px; margin-bottom: 25px; font-size: 13pt; border: 1px solid #ddd; }
-            .meta p { margin: 6px 0; }
-            .footer { margin-top: 50px; font-size: 11pt; text-align: center; color: #555; border-top: 1px solid #ccc; padding-top: 20px; }
-            table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 15px; font-size: 13pt; }
-            th, td { border: 1px solid #000; padding: 8px 10px; text-align: left; font-family: 'Times New Roman', Times, serif; }
+            li { margin-bottom: 4px; }
+            .meta { background: #f8fafc; padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-size: 12pt; border: 1px solid #cbd5e1; }
+            .meta p { margin: 4px 0; }
+            .footer { margin-top: 40px; font-size: 11pt; text-align: center; color: #555; border-top: 1px solid #ccc; padding-top: 15px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 12px; margin-bottom: 15px; font-size: 12pt; }
+            th, td { border: 1px solid #000; padding: 6px 8px; text-align: left; font-family: 'Times New Roman', Times, serif; }
             th { background: #f2f2f2; font-weight: bold; }
             .high { color: #b91c1c; font-weight: bold; }
             .low { color: #1d4ed8; font-weight: bold; }
             .trace { color: #d97706; font-weight: bold; }
             strong { font-weight: bold; }
-            
-            /* Print content style overrides to guarantee Times New Roman & 13pt */
             .report-content { font-family: 'Times New Roman', Times, serif !important; font-size: 13pt !important; line-height: 1.5 !important; color: #000 !important; }
             .report-content * { font-family: 'Times New Roman', Times, serif !important; color: #000 !important; }
-            .report-content p, .report-content li, .report-content td, .report-content span { font-size: 13pt !important; line-height: 1.5 !important; font-weight: normal !important; }
-            .report-content strong, .report-content b, .report-content strong * { font-weight: bold !important; }
-            .report-content h1 { font-size: 16pt !important; font-weight: bold !important; margin-top: 25px !important; margin-bottom: 12px !important; }
-            .report-content h2 { font-size: 14pt !important; font-weight: bold !important; margin-top: 22px !important; margin-bottom: 10px !important; border-bottom: 1px solid #ccc !important; padding-bottom: 5px !important; }
-            .report-content h3 { font-size: 13.5pt !important; font-weight: bold !important; margin-top: 18px !important; margin-bottom: 8px !important; }
-            .report-content h4 { font-size: 13pt !important; font-weight: bold !important; margin-top: 15px !important; margin-bottom: 5px !important; }
-            .report-content table { width: 100% !important; border-collapse: collapse !important; margin-top: 15px !important; margin-bottom: 15px !important; font-size: 13pt !important; }
-            .report-content th, .report-content td { border: 1px solid #000 !important; padding: 8px 10px !important; text-align: left !important; }
-            .report-content th { background: #f2f2f2 !important; font-weight: bold !important; }
-            .report-content ul, .report-content ol { margin-left: 20px !important; margin-bottom: 10px !important; list-style-type: disc !important; }
-            .report-content li { margin-bottom: 5px !important; }
+            .report-content p, .report-content li, .report-content td, .report-content span { font-size: 13pt !important; line-height: 1.5 !important; }
+            .report-content strong, .report-content b { font-weight: bold !important; }
+            .report-content table { width: 100% !important; border-collapse: collapse !important; margin: 12px 0 !important; font-size: 12pt !important; }
+            .report-content th, .report-content td { border: 1px solid #000 !important; padding: 6px 8px !important; }
+            @media print {
+              body { padding: 0; }
+              .footer { page-break-inside: avoid; }
+            }
           </style>
         </head>
         <body>
@@ -176,18 +223,79 @@ export const ReportModal: React.FC<ReportModalProps> = ({
               `).join("")}
             </tbody>
           </table>
-          <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 30px 0;" />
+          <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 25px 0;" />
           <div class="report-content">
             ${printContent}
           </div>
           <div class="footer">
             <p>Báo cáo được tổng hợp tự động bởi Bác sĩ AI thông minh. Kết quả mang tính chất tham khảo khoa học, vui lòng liên hệ bác sĩ điều trị để có chỉ định chuyên môn chính thức.</p>
           </div>
-          <script>window.print();</script>
         </body>
-      </html>
-    `);
-    printWindow.document.close();
+      </html>`;
+  };
+
+  const handleDownloadFile = () => {
+    const rawHtml = getFullPrintableHtml();
+    const blob = new Blob([rawHtml], { type: "text/html;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `Bao-cao-xet-nghiem-${patient.ten ? patient.ten.replace(/\s+/g, "_") : "benh-nhan"}.html`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
+
+  const handlePrint = () => {
+    const printableHtml = getFullPrintableHtml();
+
+    // 1. Try hidden iframe (compatible with iOS Safari, Android, and Desktop without popup blockers)
+    try {
+      let iframe = document.getElementById("report-print-hidden-iframe") as HTMLIFrameElement;
+      if (!iframe) {
+        iframe = document.createElement("iframe");
+        iframe.id = "report-print-hidden-iframe";
+        iframe.style.position = "fixed";
+        iframe.style.right = "0";
+        iframe.style.bottom = "0";
+        iframe.style.width = "0";
+        iframe.style.height = "0";
+        iframe.style.border = "0";
+        document.body.appendChild(iframe);
+      }
+
+      const doc = iframe.contentWindow?.document || iframe.contentDocument;
+      if (doc) {
+        doc.open();
+        doc.write(printableHtml);
+        doc.close();
+        setTimeout(() => {
+          try {
+            iframe.contentWindow?.focus();
+            iframe.contentWindow?.print();
+          } catch {
+            fallbackPrint(printableHtml);
+          }
+        }, 300);
+        return;
+      }
+    } catch (e) {
+      console.warn("Iframe print error, falling back", e);
+    }
+
+    fallbackPrint(printableHtml);
+  };
+
+  const fallbackPrint = (html: string) => {
+    const printWindow = window.open("", "_blank");
+    if (printWindow) {
+      printWindow.document.write(html + "<script>window.onload = function() { window.print(); };</script>");
+      printWindow.document.close();
+    } else {
+      // If popup completely blocked, automatically download file
+      handleDownloadFile();
+    }
   };
 
   return (
@@ -327,26 +435,48 @@ export const ReportModal: React.FC<ReportModalProps> = ({
           <div className="flex-1 flex flex-col bg-white dark:bg-slate-900 overflow-hidden">
             
             {/* Top Toolbar in Content Area */}
-            <div className="px-6 py-3 bg-slate-50/50 dark:bg-slate-900/50 border-b border-slate-150 dark:border-slate-800 flex items-center justify-between shrink-0 gap-3">
+            <div className="px-4 sm:px-6 py-2.5 sm:py-3 bg-slate-50/80 dark:bg-slate-900/80 border-b border-slate-150 dark:border-slate-800 flex flex-wrap items-center justify-between shrink-0 gap-2">
               <div className="text-[11px] text-slate-700 dark:text-slate-200 flex items-center gap-1.5 font-bold uppercase tracking-wider">
                 <FileText className="h-4 w-4 text-violet-500" /> BÁO CÁO CHI TIẾT
               </div>
 
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center flex-wrap gap-1.5">
+                {/* Native Mobile Share Button */}
+                <button
+                  onClick={handleShare}
+                  disabled={isLoading || !report || isSharing}
+                  title="Chia sẻ báo cáo qua Zalo, Messenger, Email..."
+                  className="px-3 py-1.5 rounded-xl text-xs font-bold bg-violet-50 hover:bg-violet-100 text-violet-700 dark:bg-violet-950/50 dark:hover:bg-violet-900/60 dark:text-violet-300 flex items-center gap-1.5 transition-all cursor-pointer border border-violet-200/60 dark:border-violet-800/60 active:scale-95"
+                >
+                  <Share2 className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">Chia sẻ</span>
+                </button>
+
+                {/* Download Standalone File Button */}
+                <button
+                  onClick={handleDownloadFile}
+                  disabled={isLoading || !report}
+                  title="Tải file báo cáo về máy để xem offline"
+                  className="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-750 dark:text-slate-200 flex items-center gap-1.5 transition-all cursor-pointer border border-slate-200 dark:border-slate-700 active:scale-95"
+                >
+                  <Download className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">Tải về</span>
+                </button>
+
                 {/* Copy Button */}
                 <button
                   onClick={handleCopy}
                   disabled={isLoading || !report}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer active:scale-95 ${
                     copied
                       ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/10"
-                      : "bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-750 dark:text-slate-200"
+                      : "bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-750 dark:text-slate-200 border border-slate-200 dark:border-slate-700"
                   }`}
                 >
                   {copied ? (
                     <>
                       <Check className="h-3.5 w-3.5" />
-                      <span>Đã sao chép</span>
+                      <span>Đã chép</span>
                     </>
                   ) : (
                     <>
@@ -356,11 +486,11 @@ export const ReportModal: React.FC<ReportModalProps> = ({
                   )}
                 </button>
 
-                {/* Print/Export PDF Button */}
+                {/* Direct Print / Save PDF Button */}
                 <button
                   onClick={handlePrint}
                   disabled={isLoading || !report}
-                  className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-750 dark:text-slate-200 flex items-center gap-1.5 transition-all cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95"
                 >
                   <Printer className="h-3.5 w-3.5" />
                   <span>In báo cáo</span>
