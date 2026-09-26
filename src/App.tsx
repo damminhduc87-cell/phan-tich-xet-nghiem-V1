@@ -98,7 +98,7 @@ export const App: React.FC = () => {
 
   // History & configuration
   const [history, setHistory] = useState<HistoryRecord[]>([]);
-  const [model, setModel] = useState<string>("gemini-3.8-flash");
+  const [model, setModel] = useState<string>("gemini-2.5-flash");
   const [systemPrompt, setSystemPrompt] = useState<string>(SYS);
   const [customApiKey, setCustomApiKey] = useState<string>("");
   const [keyAvailable, setKeyAvailable] = useState<boolean>(true);
@@ -123,9 +123,14 @@ export const App: React.FC = () => {
   // Load initial settings & history
   useEffect(() => {
     const savedModel = safeStorage.getItem("med_model");
-    if (savedModel) setModel(savedModel);
+    if (savedModel && savedModel !== "gemini-3.8-flash") {
+      setModel(savedModel);
+    } else {
+      setModel("gemini-2.5-flash");
+      safeStorage.setItem("med_model", "gemini-2.5-flash");
+    }
 
-    const CURRENT_PROMPT_VERSION = "v5_complete_5_sections_with_investigations";
+    const CURRENT_PROMPT_VERSION = "v6_mandatory_yhct_and_annotated_recommendations";
     const savedPromptVersion = safeStorage.getItem("med_prompt_version");
     const savedPrompt = safeStorage.getItem("med_prompt");
     if (savedPrompt && savedPromptVersion === CURRENT_PROMPT_VERSION) {

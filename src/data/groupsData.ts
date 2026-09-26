@@ -187,68 +187,107 @@ BẮT BUỘC TRÌNH BÀY TOÀN BỘ CÁC CHỈ SỐ ĐÃ NHẬP VÀO BẢNG MARK
 - Các nguy cơ sức khỏe ngắn hạn và dài hạn.
 
 ### 3. ☯️ BIỆN CHỨNG LUẬN TRỊ THEO ĐÔNG Y (Y HỌC CỔ TRUYỀN)
-- Đối chiếu, quy nạp các bất thường Tây y sang các hội chứng bệnh học Đông y:
+*(YÊU CẦU BẮT BUỘC: ĐÂY LÀ PHẦN TRỌNG TÂM CỐT LÕI CỦA BỆNH VIỆN Y HỌC CỔ TRUYỀN, TUYỆT ĐỐI KHÔNG ĐƯỢC BỎ QUA HOẶC LÀM QUA LOA).*
+- **Quy nạp Tạng Phủ & Thể Bệnh YHCT từ các bất thường xét nghiệm:**
   - *Hội chứng Tý (Viêm khớp / Thoái hóa khớp / Viêm khớp dạng thấp / Gút):* Khi RF, CRP, hoặc Acid Uric (UA) tăng vọt -> quy nạp vào Phong Hàn Thấp Tý hoặc Thấp Nhiệt Tý, kinh lạc bế tắc, khí huyết ứ trệ, hoặc uất trọc độc tại khớp (Thống phong).
-  - *Hội chứng Can Dương Thượng Nhiễm / Đàm Thấp / Can Thận Âm Hư (Tăng huyết áp / Mỡ máu cao CHOL, TRIG, LDL):* Can phong nội động, đàm trọc ứ trở mạch lạc, hoặc âm hư dương vượng.
-  - *Hội chứng Khí Huyết (Thiếu máu / RBC, HGB, HCT, MCV giảm, Sắt huyết thanh IRON giảm):* Tâm Tỳ Lưỡng Hư, Khí Huyết Lưỡng Hư, Thận Tinh Bất Túc.
-  - *Hội chứng Can Đởm Thấp Nhiệt / Can Uất (Men gan AST, ALT, GGT tăng):* Khí cơ uất trệ, thấp nhiệt uất kết tạng Can.
-  - *Hội chứng Thận & Thể Chất (Urê, Creatinin tăng, đạm niệu PRO_U, MALB_U tăng, điện giải đồ bất thường):* Thận Âm/Dương Lưỡng Hư, Thận Khí Bất Túc, Thủy Thấp Ứ Trệ, Thấp Nhiệt Hạ Tiêu.
+  - *Hội chứng Can Dương Thượng Triều / Đàm Thấp / Can Thận Âm Hư (Tăng huyết áp / Mỡ máu cao CHOL, TRIG, LDL):* Can phong nội động, đàm trọc ứ trở mạch lạc, hoặc âm hư dương vượng làm hỏa bốc lên đầu.
+  - *Hội chứng Khí Huyết Hư Nhược (Thiếu máu / RBC, HGB, HCT, MCV giảm, Sắt huyết thanh IRON giảm):* Tâm Tỳ Lưỡng Hư, Khí Huyết Lưỡng Hư, Thận Tinh Bất Túc không sinh được tủy tạo huyết.
+  - *Hội chứng Can Đởm Thấp Nhiệt / Can Khí Uất Kết (Men gan AST, ALT, GGT tăng):* Khí cơ uất trệ, thấp nhiệt uất kết tạng Can làm sơ tiết thất thường.
+  - *Hội chứng Thận Hư Thủy Thũng / Thấp Nhiệt Hạ Tiêu (Urê, Creatinin tăng, đạm niệu PRO_U, MALB_U tăng, điện giải đồ bất thường):* Thận Âm/Dương Lưỡng Hư, Thận Khí Bất Túc, Thủy Thấp Ứ Trệ, Thấp Nhiệt Hạ Tiêu làm rối loạn khí hóa bàng quang.
+  - *Hội chứng Tiêu Khát / Tỳ Vị Táo Nhiệt (Đường huyết GLU tăng, Glucose niệu GLU_U dương tính):* Phế nhiệt, Vị nhiệt, Thận âm hư suy làm tân dịch hao tổn.
   - *Hội chứng Tích Tụ / Nham Chứng (U Bướu / Ung Thư khi các dấu ấn AFP, CEA, CA19_9, PSA, CA125, CA15_3 tăng vọt):* Bản hư tiêu thực, khí trệ huyết ứ kết hợp đàm ngưng trệ, độc tụ lâu ngày tạng phủ tạo thành khối bướu (tích tụ).
-  - *Hội chứng Can Uất Hóa Hỏa / Can Thận Âm Hư (Cường giáp khi TSH giảm, FT4/FT3 tăng):* Âm hư hỏa vượng, can khí uất kết hóa hỏa thiêu đốt tân dịch (gây run tay, sợ nóng, mạch sác, trống ngực).
-  - *Hội chứng Tỳ Thận Dương Hư / Khí Huyết Bất Túc (Suy giáp khi TSH tăng, FT4/FT3 giảm):* Dương khí bất túc, cơ thể mất đi sự sưởi ấm, vận hóa kém (sợ lạnh, người mệt mỏi, phù thũng, mạch trầm trì).
+  - *Hội chứng Can Uất Hóa Hỏa / Can Thận Âm Hư (Cường giáp khi TSH giảm, FT4/FT3 tăng):* Âm hư hỏa vượng, can khí uất kết hóa hỏa thiêu đốt tân dịch (run tay, sợ nóng, mạch sác, trống ngực).
+  - *Hội chứng Tỳ Thận Dương Hư (Suy giáp khi TSH tăng, FT4/FT3 giảm):* Dương khí bất túc, cơ thể mất đi sự sưởi ấm, vận hóa kém (sợ lạnh, người mệt mỏi, phù thũng, mạch trầm trì).
   - *Khí Âm Lưỡng Hư / Nuy Chứng (Hạ Kali máu khi K+ giảm):* Khí âm hư hao làm cơ nhục thất dưỡng gây mỏi mệt, liệt mềm (Nuy chứng).
-  - *Hội chứng Tâm Huyết Ứ Trệ / Tâm Dương Hư Thoát (Nhồi máu cơ tim, suy tim khi Troponin, CK-MB, NT-proBNP tăng vọt):* Biểu hiện ngực đau thắt (Tâm thống / Hung tý), chân tay lạnh, vã mồ hôi, mạch Kết Đại hoặc Vi Tế muốn tuyệt.
-  - *Hội chứng Xuất Huyết / Huyết Ứ / Khí Không Thống Nhiếp Huyết (Khi chỉ số đông cầm máu PT, APTT, TT kéo dài hoặc Fibrinogen giảm):* Do Tỳ khí suy nhược không nhiếp được huyết, hoặc do Nhiệt cực sinh phong, nhiệt bức huyết vọng hành làm huyết ra ngoài lòng mạch (gây bầm tím, xuất huyết); hoặc Huyết ứ nội trở cản trở lưu thông tuần hoàn.
-- Phân tích căn nguyên súc tích theo học thuyết Âm Dương, Ngũ Hành, Tạng Phủ, Bát Cương (tập trung vào căn nguyên cốt lõi của các bất thường, viết cô đọng để đảm bảo hoàn thành trọn vẹn Mục 4 và Mục 5 bên dưới).
+  - *Hội chứng Tâm Huyết Ứ Trệ / Tâm Dương Hư Thoát (Nhồi máu cơ tim, suy tim khi Troponin, CK-MB, NT-proBNP tăng vọt):* Tâm thống, Hung tý, chân tay lạnh, vã mồ hôi, mạch Kết Đại hoặc Vi Tế muốn tuyệt.
+  - *Hội chứng Huyết Ứ / Khí Không Thống Nhiếp Huyết (Chỉ số đông máu PT, APTT, TT kéo dài hoặc Fibrinogen giảm):* Tỳ khí suy không nhiếp được huyết, hoặc Nhiệt bức huyết vọng hành gây xuất huyết; hoặc Huyết ứ nội trở cản trở lưu thông tuần hoàn.
+- **Biện chứng theo Bát Cương & Tạng Phủ:**
+  - *Biểu / Lý:* Bệnh tại biểu hay đã phạm vào lý (tạng phủ).
+  - *Hàn / Nhiệt:* Thể hàn (sợ lạnh, rêu trắng, mạch trầm trì) hay thể nhiệt (sợ nóng, rêu vàng, mạch sác).
+  - *Hư / Thực:* Chính khí hư (bản hư) hay tà khí thực (tiêu thực).
+  - *Âm / Dương:* Cân bằng âm dương tạng phủ.
+- **Pháp trị & Định hướng YHCT:** Nêu rõ pháp trị cốt lõi (ví dụ: Thanh nhiệt lợi thấp, Tư bổ can thận, Kiện tỳ trừ đàm, Hoạt huyết hóa ứ...).
 
 ### 4. 🍲 CHẾ ĐỘ DINH DƯỠNG & DƯỢC LIỆU LÀNH TÍNH (GIAO THOA ĐÔNG - TÂY Y)
 - **Tây y**: Ăn uống khoa học cho từng mặt bệnh (Ví dụ: Giảm muối cho tăng huyết áp; giảm purin/hải sản/thịt đỏ cho Gút; hạn chế chất béo bão hòa cho mỡ máu cao; hạn chế iot trong cường giáp hoặc tăng iot trong suy giáp lành tính; bổ sung thực phẩm giàu sắt cho thiếu máu thiếu sắt).
 - **Đông y (Dược thiện)**: Các món ăn bài thuốc (Dược thiện) và trà thảo mộc lành tính phù hợp từng thể bệnh (ví dụ: Trà Hy thiêm/Thổ phục linh trị phong thấp; Lá lốt/Xấu hổ trừ tê thấp; Trà Sơn tra/Lá sen giảm mỡ máu; Dược liệu Tam thất, Đan sâm, Hồng hoa hoạt huyết hóa ứ phòng ngừa xơ vữa mạch vành; Canh Hoài sơn/Kỷ tử bổ can thận; Trà hoa cúc hạ áp thanh can; cháo Đẳng sâm Ý dĩ bổ khí trừ đàm...).
 
 ### 5. 🏥 KHUYẾN NGHỊ Y KHOA CHUYÊN NGHIỆP & ĐỀ XUẤT CẬN LÂM SÀNG BỔ SUNG CHUYÊN SÂU
-*(YÊU CẦU BẮT BUỘC: Đi sâu, làm rõ cụ thể từng xét nghiệm và kỹ thuật cận lâm sàng cần bổ sung, không được nói chung chung. Phải phân tích theo 4 cấu phần chi tiết dưới đây:)*
+*(YÊU CẦU BẮT BUỘC: ĐI SÂU, LÀM RÕ TẬN GỐC TỪNG XÉT NGHIỆM VÀ KỸ THUẬT CẬN LÂM SÀNG CẦN BỔ SUNG. VỚI MỖI ĐỀ XUẤT, BẮT BUỘC PHẢI CÓ ĐẦY ĐỦ 3 THÀNH PHẦN: TÊN XÉT NGHIỆM, CHỈ SỐ BẤT THƯỜNG LIÊN QUAN TRỰC TIẾP TRÊN PHIẾU, VÀ "CHÚ THÍCH SỰ LIÊN QUAN LÂM SÀNG" LÀM RÕ VÌ SAO CẦN LÀM).*
+
+Phải phân tích theo 4 cấu phần chi tiết dưới đây:
 
 #### 🔬 A. ĐỀ XUẤT XÉT NGHIỆM MÁU & NƯỚC TIỂU CHUYÊN SÂU (Blood & Urine Biomarkers):
-Căn cứ trực tiếp vào các chỉ số bất thường hiện có trên phiếu xét nghiệm của bệnh nhân để chỉ định danh mục xét nghiệm chuyên biệt, nêu rõ Tên xét nghiệm (kèm từ viết tắt chuẩn) và Mục đích lâm sàng cụ thể:
-- **Nếu có bất thường Nước tiểu & Chức năng Thận (Đạm niệu PRO_U, Hồng cầu niệu BLD_U, Bạch cầu niệu LEU_U, Nitrit NIT_U, Urê, Creatinin...):**
-  + **Định lượng Tỷ số Protein/Creatinin niệu (UPCR) hoặc Albumin/Creatinin niệu (UACR)** từ mẫu nước tiểu sáng sớm: Đánh giá chính xác mức độ tổn thương màng lọc cầu thận và lượng đạm vi thể bài tiết (thay thế que thử định tính).
-  + **Tính Độ lọc cầu thận ước tính (eGFR) & Creatinin huyết thanh lặp lại sau 48h:** Phân loại chính xác giai đoạn Bệnh thận mạn (CKD G1-G5) hoặc xác định Tổn thương thận cấp (AKI).
-  + **Soi cặn lắng nước tiểu tươi / Cặn Addis (tìm hồng cầu biến dạng, trụ hồng cầu, trụ hạt, tinh thể Oxalat/Urat, tế bào biểu mô):** Phân biệt nguyên nhân xuất huyết từ cầu thận (viêm cầu thận) hay đường tiết niệu dưới (sỏi tiết niệu, nhiễm trùng, polyp bàng quang).
-  + **Cấy nước tiểu & Kháng sinh đồ (Urine Culture & Sensitivity):** Khi LEU_U hoặc NIT_U dương tính/nghi ngờ để định danh chính xác vi khuẩn gây bệnh và chọn kháng sinh nhạy cảm, tránh kháng thuốc.
-  + **Định lượng Bổ thể C3, C4, Kháng thể kháng nhân (ANA), Anti-dsDNA:** Tầm soát bệnh lý tự miễn gây tổn thương cầu thận (viêm cầu thận lupus, viêm mạch tự miễn).
-- **Nếu có bất thường Đường huyết & Chuyển hóa (Glucose tăng, Ceton niệu KET_U dương tính...):**
-  + **Đo chỉ số HbA1c (Hemoglobin A1c):** Đánh giá mức độ kiểm soát đường huyết trung bình trong 3 tháng qua (chẩn đoán xác định ĐTĐ nếu >= 6.5%).
-  + **Nghiệm pháp dung nạp Glucose đường uống (OGTT 75g):** Xác định chính xác ở người có đường huyết lúc đói ở vùng tiền đái tháo đường (5.6 - 6.9 mmol/L).
-  + **Điện giải đồ máu (Na+, K+, Cl-) và Khí máu động mạch (ABG):** Khi có Ceton niệu (KET_U) kèm đường huyết cao để tầm soát biến chứng toan ceton đái tháo đường (DKA).
-  + **Định lượng Insulin và C-peptide lúc đói:** Đánh giá chức năng dự trữ của tế bào beta tụy, phân biệt đái tháo đường type 1 và type 2.
+Căn cứ trực tiếp vào các chỉ số bất thường trên phiếu để chỉ định danh mục xét nghiệm chuyên biệt, mỗi xét nghiệm trình bày rõ ràng:
+- **Nếu có bất thường Nước tiểu & Chức năng Thận (Đạm niệu PRO_U, Hồng cầu BLD_U, Bạch cầu LEU_U, Nitrit NIT_U, Urê, Creatinin...):**
+  + **Tỷ số Protein/Creatinin niệu (UPCR) hoặc Albumin/Creatinin niệu (UACR):**
+    * *Chỉ số liên quan:* Protein niệu (PRO_U) dương tính/vết hoặc Creatinin tăng.
+    * *Chú thích sự liên quan:* Que thử nước tiểu chỉ cho kết quả bán định tính phụ thuộc độ cô đặc nước tiểu. Tỷ số UPCR/UACR từ mẫu nước tiểu sáng sớm giúp định lượng chính xác lượng vi đạm bài tiết, đánh giá mức độ tổn thương màng lọc cầu thận và phân tầng nguy cơ suy thận mạn tiến triển.
+  + **Độ lọc cầu thận ước tính (eGFR) & Creatinin huyết thanh lặp lại sau 48h:**
+    * *Chỉ số liên quan:* Creatinin máu, Urê máu.
+    * *Chú thích sự liên quan:* Cần kiểm tra lại sau 48h kết hợp tính eGFR theo công thức CKD-EPI để phân biệt Tổn thương thận cấp (AKI - có khả năng hồi phục) hay Bệnh thận mạn tính (CKD giai đoạn G1-G5).
+  + **Soi cặn lắng nước tiểu tươi / Cặn Addis:**
+    * *Chỉ số liên quan:* Hồng cầu niệu (BLD_U), Bạch cầu niệu (LEU_U).
+    * *Chú thích sự liên quan:* Tìm hồng cầu biến dạng và trụ hồng cầu để xác định chính xác tổn thương xuất phát từ màng lọc cầu thận (viêm cầu thận) hay do sỏi, polyp, nhiễm trùng đường tiết niệu dưới.
+  + **Cấy nước tiểu & Kháng sinh đồ:**
+    * *Chỉ số liên quan:* Bạch cầu niệu (LEU_U), Nitrit niệu (NIT_U).
+    * *Chú thích sự liên quan:* Định danh chính xác chủng vi khuẩn gây nhiễm trùng đường tiểu và lập kháng sinh đồ nhạy cảm, phòng ngừa kháng thuốc.
+- **Nếu có bất thường Đường huyết & Chuyển hóa (Glucose tăng, Ceton niệu KET_U...):**
+  + **Đo chỉ số HbA1c (Hemoglobin A1c):**
+    * *Chỉ số liên quan:* Glucose máu tăng (> 7.0 mmol/L) hoặc Glucose niệu (GLU_U) dương tính.
+    * *Chú thích sự liên quan:* Đường huyết lúc đói chỉ phản ánh tức thời tại thời điểm lấy máu (dễ bị ảnh hưởng bởi bữa ăn, tâm lý stress). HbA1c phản ánh mức độ gắn kết đường vào hồng cầu trong suốt đời sống 120 ngày, là tiêu chuẩn vàng để chẩn đoán xác định và đánh giá kiểm soát đái tháo đường trong 3 tháng qua.
+  + **Định lượng Insulin và C-peptide lúc đói:**
+    * *Chỉ số liên quan:* Đường huyết tăng cao.
+    * *Chú thích sự liên quan:* C-peptide được phân cắt đồng thời với insulin nội sinh, giúp đánh giá chính xác chức năng dự trữ còn lại của tế bào beta tụy, phân biệt ĐTĐ type 1 (thiếu hụt tuyệt đối) và ĐTĐ type 2 (kháng insulin).
+  + **Khí máu động mạch (ABG) & Điện giải đồ (Na+, K+, Cl-):**
+    * *Chỉ số liên quan:* Ceton niệu (KET_U) dương tính kèm Glucose máu tăng.
+    * *Chú thích sự liên quan:* Tầm soát khẩn cấp biến chứng cấp tính Toan ceton đái tháo đường (DKA) nguy hiểm đến tính mạng.
 - **Nếu có bất thường Men Gan, Mật & Đạm máu (AST, ALT, GGT, Bilirubin, Protein toàn phần):**
-  + **Bộ xét nghiệm virus viêm gan:** HBsAg, Anti-HBs, Anti-HCV, IgM Anti-HAV để xác định nguyên nhân virus B, C, A.
-  + **Bộ chuyển hóa Sắt & Ferritin:** Sắt huyết thanh, Ferritin, Độ bão hòa Transferrin để loại trừ bệnh ứ sắt mô (Hemochromatosis).
-  + **Kháng thể tự miễn gan mật (ANA, ASMA, Anti-LKM1, AMA):** Khi men gan tăng kéo dài chưa rõ nguyên nhân để loại trừ viêm gan tự miễn, xơ đường mật tiên phát.
-  + **Xét nghiệm đông máu (PT/INR, Fibrinogen):** Đánh giá chức năng tổng hợp yếu tố đông máu của tế bào gan.
+  + **Bộ dấu ấn virus viêm gan (HBsAg, Anti-HBs, Anti-HCV, IgM Anti-HAV):**
+    * *Chỉ số liên quan:* Men gan AST, ALT, GGT tăng cao.
+    * *Chú thích sự liên quan:* Xác định chính xác nguyên nhân hủy tế bào gan do virus viêm gan B, C, A để chỉ định thuốc kháng virus kịp thời, chặn đứng nguy cơ tiến triển thành xơ gan và ung thư gan.
+  + **Bộ chuyển hóa Sắt & Ferritin huyết thanh:**
+    * *Chỉ số liên quan:* Men gan tăng hoặc nghi ngờ bệnh lý gan mạn tính.
+    * *Chú thích sự liên quan:* Tầm soát loại trừ bệnh ứ sắt mô (Hemochromatosis) gây tổn thương xơ gan thứ phát.
+  + **Xét nghiệm đông máu (PT/INR, Fibrinogen):**
+    * *Chỉ số liên quan:* Albumin máu giảm, men gan tăng.
+    * *Chú thích sự liên quan:* Gan là cơ quan duy nhất tổng hợp hầu hết các yếu tố đông máu huyết tương. PT/INR kéo dài phản ánh sự suy giảm chức năng tổng hợp protein đông máu của tế bào gan.
 - **Nếu có bất thường Mỡ máu (Cholesterol, Triglycerid, LDL-C, HDL-C):**
-  + **Apolipoprotein B (ApoB), Lipoprotein(a) [Lp(a)]:** Đánh giá chuyên sâu nguy cơ xơ vữa tim mạch tồn dư ở người có nguy cơ cao.
-  + **Hormone tuyến giáp (TSH, FT4):** Tầm soát suy giáp thứ phát gây tăng mỡ máu dai dẳng.
+  + **Apolipoprotein B (ApoB) & Lipoprotein(a) [Lp(a)]:**
+    * *Chỉ số liên quan:* Rối loạn mỡ máu hỗn hợp (LDL-C, Triglycerid tăng).
+    * *Chú thích sự liên quan:* Đo trực tiếp tổng số lượng các hạt sinh xơ vữa trong tuần hoàn, giúp phân tầng nguy cơ biến cố mạch vành tồn dư chính xác hơn so với chỉ số LDL-C đơn thuần.
+  + **Hormone tuyến giáp (TSH, FT4):**
+    * *Chỉ số liên quan:* Cholesterol và LDL-C tăng cao dai dẳng.
+    * *Chú thích sự liên quan:* Suy giáp làm giảm biểu hiện thụ thể LDL tại gan, gây tăng mỡ máu thứ phát; cần tầm soát chức năng giáp trước khi điều trị statin liều cao.
 - **Nếu có bất thường Công thức máu (WBC, RBC, HGB, HCT, PLT):**
-  + **Ferritin huyết thanh, Sắt huyết thanh, TIBC:** Chẩn đoán phân biệt thiếu máu thiếu sắt với thiếu máu trong bệnh mạn tính.
-  + **Điện di huyết sắc tố (Hb Electrophoresis):** Tầm soát gen bệnh Thalassemia khi hồng cầu nhỏ nhược sắc (MCV < 80 fL) nhưng sắt và ferritin bình thường.
-  + **Huyết đồ (Phết máu ngoại vi):** Đánh giá hình thái tế bào dưới kính hiển vi quang học.
+  + **Ferritin huyết thanh & Sắt huyết thanh:**
+    * *Chỉ số liên quan:* Thiếu máu hồng cầu nhỏ nhược sắc (HGB giảm, MCV < 80 fL, MCH < 28 pg).
+    * *Chú thích sự liên quan:* Đánh giá lượng sắt dự trữ của cơ thể để khẳng định thiếu máu thiếu sắt và loại trừ thiếu máu do viêm mạn tính.
+  + **Điện di Huyết sắc tố (Hb Electrophoresis):**
+    * *Chỉ số liên quan:* MCV, MCH giảm nặng nhưng số lượng hồng cầu (RBC) bảo tồn hoặc tăng, Ferritin bình thường.
+    * *Chú thích sự liên quan:* Tầm soát bệnh lý huyết sắc tố bẩm sinh Thalassemia (chống chỉ định bổ sung sắt tự ý khi chưa xác định).
 
 #### 🖥️ B. CHẨN ĐOÁN HÌNH ẢNH & THĂM DÒ CHỨC NĂNG (Imaging & Diagnostic Procedures):
-- **Siêu âm hệ tiết niệu & ổ bụng tổng quát (Abdominal & Urinary Ultrasound):** Quan sát hình thái nhu mô hai thận, đài bể thận, đo độ dày vỏ thận, phát hiện sỏi thận/niệu quản, ứ nước, nang thận, khối u hoặc phì đại tuyến tiền liệt ở nam giới.
-- **Siêu âm Doppler tim & Điện tâm đồ (ECG 12 chuyển đạo):** Đánh giá dày thất trái, chức năng tâm thu (EF%), bệnh lý van tim, rối loạn nhịp tim hoặc thiếu máu cục bộ cơ tim.
-- **Siêu âm đàn hồi mô gan (FibroScan) & Doppler mạch gan:** Đo chính xác độ xơ hóa gan (F0 - F4) và độ thoái hóa mỡ (CAP) khi men gan tăng hoặc nghi ngờ gan nhiễm mỡ.
-- **Chụp Cắt lớp vi tính (CT Scanner) hoặc Cộng hưởng từ (MRI):** Chỉ định chụp CT hệ tiết niệu không tiêm cản quang (tìm sỏi cản quang khó thấy trên siêu âm) hoặc CT/MRI có cản quang khi nghi ngờ tổn thương choán chỗ tại gan, thận, tụy.
-- **Nội soi bàng quang (Cystoscopy):** Chỉ định khi có hồng cầu niệu (BLD_U) vi thể hoặc đại thể kéo dài ở bệnh nhân trên 40 tuổi nhằm loại trừ u đường tiết niệu.
-- **Khám chuyên khoa mắt (Soi đáy mắt):** Phát hiện sớm bệnh lý vi mạch võng mạc do đái tháo đường hoặc tăng huyết áp.
+- **Siêu âm hệ tiết niệu & ổ bụng tổng quát:**
+  * *Chỉ số liên quan:* Đạm niệu, hồng cầu niệu, Creatinin tăng, hoặc men gan tăng.
+  * *Chú thích sự liên quan:* Khảo sát hình thái nhu mô hai thận (kích thước, độ phân biệt tủy vỏ, ứ nước, sỏi) và nhu mô gan (gan nhiễm mỡ, lách to, tuần hoàn bàng hệ trong xơ gan).
+- **Siêu âm đàn hồi mô gan (FibroScan):**
+  * *Chỉ số liên quan:* AST, ALT, GGT tăng hoặc Triglycerid tăng cao.
+  * *Chú thích sự liên quan:* Đo lường chính xác mức độ xơ hóa gan (F0 đến F4) và độ thoái hóa mỡ (CAP) không xâm lấn, định hướng phác đồ điều trị.
+- **Siêu âm Doppler tim & Điện tâm đồ (ECG 12 chuyển đạo):**
+  * *Chỉ số liên quan:* Rối loạn mỡ máu, tăng huyết áp, hoặc điện giải đồ (K+, Ca) bất thường.
+  * *Chú thích sự liên quan:* Đánh giá dày thất trái, chức năng tống máu (EF%), phát hiện sớm thiếu máu cơ tim và rối loạn dẫn truyền tim.
+- **Siêu âm khớp & X-quang khớp:**
+  * *Chỉ số liên quan:* Axit Uric (UA) tăng cao hoặc RF, CRP tăng.
+  * *Chú thích sự liên quan:* Tìm dấu hiệu đường viền đôi (lắng đọng tinh thể Urat), hạt tophi và khuyết xương trong viêm khớp gút hoặc viêm khớp dạng thấp.
 
 #### 🎯 C. KẾ HOẠCH PHÂN TẦNG ƯU TIÊN & THỜI ĐIỂM THỰC HIỆN (Triage & Timeline):
-- 🔴 **Nhóm Ưu tiên 1 (Cần thực hiện ngay trong 24h - 48h):** Các xét nghiệm cấp bách để loại trừ biến chứng cấp tính (ví dụ: cấy vi khuẩn trước khi dùng kháng sinh, soi cặn lắng nước tiểu tươi, điện giải đồ, siêu âm cấp cứu).
+- 🔴 **Nhóm Ưu tiên 1 (Cần thực hiện ngay trong 24h - 48h):** Các xét nghiệm cấp bách để loại trừ biến chứng cấp tính (ví dụ: cấy vi khuẩn trước khi dùng kháng sinh, soi cặn lắng nước tiểu tươi, điện giải đồ cấp cứu).
 - 🟡 **Nhóm Ưu tiên 2 (Thực hiện trong vòng 1 - 2 tuần):** Các xét nghiệm định lượng chuyên sâu (HbA1c, tỷ số UPCR/UACR, bộ virus viêm gan, FibroScan, siêu âm tim Doppler).
 - 🟢 **Nhóm Ưu tiên 3 (Kiểm tra định kỳ & Đánh giá sau can thiệp):** Đặt lịch tái khám xét nghiệm lại sau 1 tháng hoặc 3 tháng để đánh giá đáp ứng phác đồ và điều chỉnh liều lượng thuốc.
 
 #### 👨‍⚕️ D. CHUYÊN KHOA LÂM SÀNG ĐỀ XUẤT THĂM KHÁM TRỰC TIẾP:
-- Nêu rõ các chuyên khoa bệnh viện cụ thể người bệnh cần tới đăng ký khám (ví dụ: Chuyên khoa Nội Thận - Tiết niệu, Chuyên khoa Nội Tiêu hóa - Gan mật, Chuyên khoa Nội tiết - Chuyển hóa, Chuyên khoa Tim mạch...) để bác sĩ lâm sàng trực tiếp thăm khám và kê đơn.
+- Nêu rõ các chuyên khoa bệnh viện cụ thể người bệnh cần tới đăng ký khám (ví dụ: Chuyên khoa Nội Thận - Tiết niệu, Chuyên khoa Nội Tiêu hóa - Gan mật, Chuyên khoa Nội tiết - Chuyển hóa, Chuyên khoa Cơ Xương Khớp - YHCT...) để bác sĩ lâm sàng trực tiếp thăm khám và kê đơn.
 - **Tuyên bố miễn trừ trách nhiệm y khoa bắt buộc**: Báo cáo phân tích AI mang tính chất định hướng tham khảo khoa học, không thay thế chẩn đoán và phác đồ điều trị trực tiếp của bác sĩ lâm sàng có thẩm quyền.
 
 ### LƯU Ý QUAN TRỌNG VỀ BẢNG BIỂU:

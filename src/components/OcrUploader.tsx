@@ -43,7 +43,7 @@ export const OcrUploader: React.FC<OcrUploaderProps> = ({ onImageSelected, isUpl
             bitmap = await window.createImageBitmap(file);
           }
 
-          const MAX_DIM = 2560; // Retain ultra-fine handwriting clarity for top/bottom table rows
+          const MAX_DIM = 1800; // Optimal resolution: preserves crystal-clear text & handwriting while cutting payload by 80%
           let width = bitmap.width;
           let height = bitmap.height;
 
@@ -64,9 +64,9 @@ export const OcrUploader: React.FC<OcrUploaderProps> = ({ onImageSelected, isUpl
           if (ctx) {
             ctx.clearRect(0, 0, width, height); // Zero crop / zero clip
             ctx.drawImage(bitmap, 0, 0, width, height);
-            const dataUrl = canvas.toDataURL("image/jpeg", 0.92);
+            const dataUrl = canvas.toDataURL("image/jpeg", 0.84);
             const base64 = dataUrl.split(",")[1];
-            setUploadStep("Đang nhận diện chữ số y sinh bằng AI...");
+            setUploadStep("Đang quét và ánh xạ chỉ số y học bằng AI...");
 
             // Pass safe, permanent dataUrl to avoid blob revocation and HEIC incompatibility issues
             onImageSelected(base64, "image/jpeg", file, dataUrl);
@@ -89,7 +89,7 @@ export const OcrUploader: React.FC<OcrUploaderProps> = ({ onImageSelected, isUpl
         const img = new Image();
         img.onload = () => {
           try {
-            const MAX_DIM = 2560;
+            const MAX_DIM = 1800;
             let width = img.width;
             let height = img.height;
 
@@ -110,9 +110,9 @@ export const OcrUploader: React.FC<OcrUploaderProps> = ({ onImageSelected, isUpl
             if (ctx) {
               ctx.clearRect(0, 0, width, height);
               ctx.drawImage(img, 0, 0, width, height);
-              const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.92);
+              const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.84);
               const base64 = compressedDataUrl.split(",")[1];
-              setUploadStep("Đang nhận diện chữ số y sinh bằng AI...");
+              setUploadStep("Đang quét và ánh xạ chỉ số y học bằng AI...");
               onImageSelected(base64, "image/jpeg", file, compressedDataUrl);
             } else {
               const parts = resultStr.split(",");

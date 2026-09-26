@@ -326,8 +326,68 @@ export const Step5ReportAnalysis: React.FC<Step5ReportAnalysisProps> = ({
                     )}
                   </div>
 
+                  {/* Quick Jump Bar for Report Sections */}
+                  <div className="flex flex-wrap items-center gap-1.5 p-2 bg-slate-100/80 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700/80 text-[10.5px]">
+                    <span className="font-bold text-slate-500 dark:text-slate-400 mr-1">Cuộn nhanh mục:</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const el = document.getElementById("step5-markdown-preview");
+                        const target = el?.querySelector("h3, h2");
+                        target?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }}
+                      className="px-2 py-1 rounded-lg bg-white dark:bg-slate-900 font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 shadow-xs cursor-pointer"
+                    >
+                      1. Hồ sơ
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const el = document.getElementById("step5-markdown-preview");
+                        const target = Array.from(el?.querySelectorAll("h3, h2") || []).find((h) => h.textContent?.includes("2."));
+                        target?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }}
+                      className="px-2 py-1 rounded-lg bg-white dark:bg-slate-900 font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 shadow-xs cursor-pointer"
+                    >
+                      2. Tây Y
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const el = document.getElementById("step5-markdown-preview");
+                        const target = Array.from(el?.querySelectorAll("h3, h2") || []).find((h) => h.textContent?.includes("3.") || h.textContent?.includes("ĐÔNG Y") || h.textContent?.includes("Y HỌC CỔ TRUYỀN"));
+                        target?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }}
+                      className="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 font-bold hover:bg-emerald-200 dark:hover:bg-emerald-900 border border-emerald-300 dark:border-emerald-700 shadow-xs cursor-pointer flex items-center gap-1"
+                    >
+                      <span>☯️ 3. Đông Y (YHCT)</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const el = document.getElementById("step5-markdown-preview");
+                        const target = Array.from(el?.querySelectorAll("h3, h2") || []).find((h) => h.textContent?.includes("4."));
+                        target?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }}
+                      className="px-2 py-1 rounded-lg bg-white dark:bg-slate-900 font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 shadow-xs cursor-pointer"
+                    >
+                      4. Dinh dưỡng
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const el = document.getElementById("step5-markdown-preview");
+                        const target = Array.from(el?.querySelectorAll("h3, h2") || []).find((h) => h.textContent?.includes("5.") || h.textContent?.includes("KHUYẾN NGHỊ"));
+                        target?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }}
+                      className="px-2 py-1 rounded-lg bg-white dark:bg-slate-900 font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 shadow-xs cursor-pointer"
+                    >
+                      5. Khuyến nghị
+                    </button>
+                  </div>
+
                   {/* Markdown Report Preview Content */}
-                  <div className="p-4 sm:p-6 bg-slate-50/50 dark:bg-slate-950/40 rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-slate-800 prose prose-slate dark:prose-invert max-w-none text-xs leading-relaxed max-h-[500px] overflow-y-auto pr-2 scrollbar-thin force-scroll break-words">
+                  <div id="step5-markdown-preview" className="p-4 sm:p-6 bg-slate-50/50 dark:bg-slate-950/40 rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-slate-800 prose prose-slate dark:prose-invert max-w-none text-xs leading-relaxed max-h-[500px] overflow-y-auto pr-2 scrollbar-thin force-scroll break-words">
                     <ReactMarkdown 
                       remarkPlugins={[remarkGfm]}
                       components={{

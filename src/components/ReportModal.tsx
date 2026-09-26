@@ -438,6 +438,35 @@ export const ReportModal: React.FC<ReportModalProps> = ({
               </div>
             </div>
 
+            {/* Traditional Medicine (YHCT) Summary Box on Desktop */}
+            <div className="p-3.5 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/20 border border-emerald-200 dark:border-emerald-800 rounded-2xl space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-black text-emerald-900 dark:text-emerald-200 uppercase tracking-wide flex items-center gap-1.5">
+                  <Activity className="h-3.5 w-3.5 text-emerald-600" />
+                  <span>☯️ Y Học Cổ Truyền</span>
+                </span>
+                <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-200/70 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 font-bold">
+                  Đông Y
+                </span>
+              </div>
+              <p className="text-[10.5px] text-emerald-800 dark:text-emerald-300 leading-relaxed">
+                Báo cáo tích hợp đầy đủ <strong>Mục 3: Biện chứng luận trị theo Đông Y</strong>, quy nạp ngũ tạng (Can, Thận, Tỳ, Tâm, Phế) và Bát Cương.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  const headers = Array.from(document.querySelectorAll("#report-print-area h3, #report-print-area h2, #report-print-area h4"));
+                  const target = headers.find((el) => el.textContent?.includes("ĐÔNG Y") || el.textContent?.includes("Y HỌC CỔ TRUYỀN") || el.textContent?.includes("3."));
+                  if (target) {
+                    target.scrollIntoView({ behavior: "smooth", block: "start" });
+                  }
+                }}
+                className="w-full text-center px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs rounded-xl shadow-xs transition-all cursor-pointer flex items-center justify-center gap-1.5"
+              >
+                <span>Xem Mục 3: Biện Chứng Đông Y ⬇️</span>
+              </button>
+            </div>
+
             {/* Note alert */}
             <div className="p-3.5 bg-amber-50/80 dark:bg-amber-950/15 border border-amber-100 dark:border-amber-900/40 rounded-2xl flex gap-2.5 items-start">
               <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0 mt-0.5 animate-pulse" />
@@ -452,8 +481,64 @@ export const ReportModal: React.FC<ReportModalProps> = ({
             
             {/* Top Toolbar in Content Area */}
             <div className="px-4 sm:px-6 py-2.5 sm:py-3 bg-slate-50/80 dark:bg-slate-900/80 border-b border-slate-150 dark:border-slate-800 flex flex-wrap items-center justify-between shrink-0 gap-2">
-              <div className="text-[11px] text-slate-700 dark:text-slate-200 flex items-center gap-1.5 font-bold uppercase tracking-wider">
-                <FileText className="h-4 w-4 text-violet-500" /> BÁO CÁO CHI TIẾT
+              <div className="flex items-center gap-2">
+                <div className="text-[11px] text-slate-700 dark:text-slate-200 flex items-center gap-1.5 font-bold uppercase tracking-wider">
+                  <FileText className="h-4 w-4 text-violet-500" /> BÁO CÁO CHI TIẾT
+                </div>
+
+                {/* Desktop Quick Nav Anchor Tabs */}
+                <div className="hidden lg:flex items-center gap-1 ml-2 pl-2 border-l border-slate-200 dark:border-slate-700">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const h = Array.from(document.querySelectorAll("#report-print-area h3, #report-print-area h2")).find((el) => el.textContent?.includes("1."));
+                      h?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }}
+                    className="px-2 py-0.5 text-[10px] font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-200/60 dark:hover:bg-slate-800 rounded cursor-pointer"
+                  >
+                    1. Hồ sơ
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const h = Array.from(document.querySelectorAll("#report-print-area h3, #report-print-area h2")).find((el) => el.textContent?.includes("2."));
+                      h?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }}
+                    className="px-2 py-0.5 text-[10px] font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-200/60 dark:hover:bg-slate-800 rounded cursor-pointer"
+                  >
+                    2. Tây Y
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const h = Array.from(document.querySelectorAll("#report-print-area h3, #report-print-area h2")).find((el) => el.textContent?.includes("3.") || el.textContent?.includes("ĐÔNG Y") || el.textContent?.includes("Y HỌC CỔ TRUYỀN"));
+                      h?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }}
+                    className="px-2 py-0.5 text-[10px] font-black text-emerald-800 bg-emerald-100 dark:text-emerald-300 dark:bg-emerald-950/60 hover:bg-emerald-200 dark:hover:bg-emerald-900/60 rounded cursor-pointer border border-emerald-300 dark:border-emerald-700 flex items-center gap-1"
+                  >
+                    <span>☯️ 3. Đông Y</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const h = Array.from(document.querySelectorAll("#report-print-area h3, #report-print-area h2")).find((el) => el.textContent?.includes("4."));
+                      h?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }}
+                    className="px-2 py-0.5 text-[10px] font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-200/60 dark:hover:bg-slate-800 rounded cursor-pointer"
+                  >
+                    4. Dinh dưỡng
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const h = Array.from(document.querySelectorAll("#report-print-area h3, #report-print-area h2")).find((el) => el.textContent?.includes("5.") || el.textContent?.includes("KHUYẾN NGHỊ"));
+                      h?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }}
+                    className="px-2 py-0.5 text-[10px] font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-200/60 dark:hover:bg-slate-800 rounded cursor-pointer"
+                  >
+                    5. Khuyến nghị
+                  </button>
+                </div>
               </div>
 
               <div className="flex items-center flex-wrap gap-1.5">

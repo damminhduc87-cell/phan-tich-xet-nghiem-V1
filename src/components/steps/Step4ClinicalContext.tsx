@@ -67,6 +67,25 @@ export const Step4ClinicalContext: React.FC<Step4ClinicalContextProps> = ({
     "Mạch huyền hoạt",
   ];
 
+  // Specific Traditional Medicine (YHCT) Syndromes & Patterns for BV YHCT
+  const YHCT_SYNDROMES = [
+    { name: "Can đởm thấp nhiệt", desc: "Men gan cao, đắng miệng, vàng mắt, tiểu vàng sẫm" },
+    { name: "Thận âm hư / Can thận âm hư", desc: "Đau mỏi lưng gối, hoa mắt, ù tai, tiểu đêm nhiều" },
+    { name: "Thận dương hư / Thủy thũng", desc: "Phù 2 chân, sợ lạnh, chân tay lạnh, tiểu ít" },
+    { name: "Tỳ hư thấp trệ / Đàm ẩm", desc: "Mỡ máu cao, béo phì, ăn kém, bụng đầy trướng" },
+    { name: "Tiêu khát (Tỳ vị táo nhiệt)", desc: "Đường huyết cao, khát nước, uống nhiều tiểu nhiều" },
+    { name: "Phong hàn thấp tý", desc: "Đau mỏi khớp, trời lạnh ẩm đau tăng, cứng khớp sáng" },
+    { name: "Thấp nhiệt tý (Thống phong)", desc: "Khớp sưng nóng đỏ đau dữ dội, axit uric máu tăng" },
+    { name: "Tâm tỳ lưỡng hư / Khí huyết hư", desc: "Thiếu máu, da xanh nhợt, mệt mỏi, hồi hộp, mất ngủ" },
+    { name: "Khí trệ huyết ứ", desc: "Đau nhói cố định, sắc mặt sạm, môi lưỡi tím có điểm ứ huyết" },
+  ];
+
+  const YHCT_EXAMINATION = [
+    { category: "Thiệt chẩn (Lưỡi)", items: ["Chất lưỡi bệu nhợt, có dấu răng", "Lưỡi đỏ, rêu vàng dày nhớt", "Lưỡi thon đỏ ít rêu, nứt nẻ", "Chất lưỡi tím, có điểm ứ huyết"] },
+    { category: "Thiết chẩn (Mạch)", items: ["Mạch Trầm nhược vô lực", "Mạch Huyền hoạt", "Mạch Tế sác", "Mạch Phù khẩn"] },
+    { category: "Bát cương", items: ["Biểu thực hàn", "Lý hư nhiệt", "Lý thực nhiệt", "Âm hư hỏa vượng", "Dương hư thủy phiếm"] },
+  ];
+
   const handleAddDiagnosis = (diag: string) => {
     if (!patient.chanDoan) {
       setPatient({ ...patient, chanDoan: diag });
@@ -207,6 +226,82 @@ export const Step4ClinicalContext: React.FC<Step4ClinicalContextProps> = ({
               </div>
             </div>
           </div>
+
+          {/* Dedicated Traditional Medicine (YHCT) Specialty Card */}
+          <div className="bg-gradient-to-br from-emerald-50/40 via-teal-50/20 to-purple-50/20 dark:from-emerald-950/25 dark:via-teal-950/15 dark:to-purple-950/15 border-2 border-emerald-300/80 dark:border-emerald-800/80 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xl space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-emerald-200/60 dark:border-emerald-800/60">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 bg-emerald-600 text-white rounded-xl shadow-md shadow-emerald-500/20">
+                  <Activity className="h-4 w-4" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider font-title flex items-center gap-2">
+                    <span>Định Hướng Y Học Cổ Truyền (Đông Y)</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 font-bold border border-emerald-200 dark:border-emerald-700">
+                      BV YHCT Lạng Sơn
+                    </span>
+                  </h4>
+                  <p className="text-[10.5px] text-slate-500 dark:text-slate-400">
+                    Chọn nhanh thể bệnh và tứ chẩn để AI lập luận biện chứng theo ngũ tạng, âm dương
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* YHCT Syndromes */}
+            <div className="space-y-2">
+              <span className="text-[10.5px] font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
+                <span>Thể Bệnh Y Học Cổ Truyền Thường Gặp (click để thêm):</span>
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {YHCT_SYNDROMES.map((syn) => (
+                  <button
+                    key={syn.name}
+                    type="button"
+                    onClick={() => {
+                      handleAddDiagnosis(syn.name);
+                      handleAddSymptom(syn.desc);
+                    }}
+                    className="text-left p-2.5 rounded-xl bg-white/80 hover:bg-emerald-50 dark:bg-slate-900/80 dark:hover:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/70 transition-all cursor-pointer shadow-xs group"
+                  >
+                    <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 flex items-center justify-between">
+                      <span>+ {syn.name}</span>
+                      <span className="text-[9px] text-emerald-500 font-normal">Thêm</span>
+                    </div>
+                    <div className="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">
+                      {syn.desc}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* YHCT Examination (Tongue, Pulse, Eight Principles) */}
+            <div className="space-y-3 pt-2 border-t border-emerald-200/40 dark:border-emerald-800/40">
+              <span className="text-[10.5px] font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider">
+                Tứ Chẩn: Thiệt Chẩn (Lưỡi), Mạch Chẩn & Bát Cương:
+              </span>
+              <div className="space-y-2">
+                {YHCT_EXAMINATION.map((group) => (
+                  <div key={group.category} className="space-y-1">
+                    <span className="text-[10px] text-slate-400 font-bold">{group.category}:</span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {group.items.map((item) => (
+                        <button
+                          key={item}
+                          type="button"
+                          onClick={() => handleAddSymptom(item)}
+                          className="text-[10.5px] px-2.5 py-1 rounded-xl bg-emerald-50/80 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 font-semibold transition-colors cursor-pointer border border-emerald-200/60 dark:border-emerald-800"
+                        >
+                          + {item}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Right column: SmartSuggestions AI & Readiness Overview (5 cols) */}
@@ -251,6 +346,13 @@ export const Step4ClinicalContext: React.FC<Step4ClinicalContextProps> = ({
                 <span className="text-slate-500">Triệu chứng lâm sàng:</span>
                 <span className="font-bold text-slate-800 dark:text-slate-200 truncate max-w-[170px]">
                   {patient.trieuChung ? `✅ ${patient.trieuChung}` : "Chưa nhập (tùy chọn)"}
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between p-2.5 bg-emerald-50/50 dark:bg-emerald-950/30 rounded-xl border border-emerald-200 dark:border-emerald-800">
+                <span className="text-emerald-700 dark:text-emerald-400 font-medium">Bối cảnh Đông - Tây Y:</span>
+                <span className="font-bold text-emerald-800 dark:text-emerald-300">
+                  {patient.trieuChung || patient.chanDoan ? "✅ Đã sẵn sàng lập luận" : "⚠️ Cần thêm thông tin"}
                 </span>
               </div>
             </div>

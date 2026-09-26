@@ -4,6 +4,7 @@ import fs from "fs";
 import crypto from "crypto";
 import { GoogleGenAI, Type } from "@google/genai";
 import { resolveMetricId, METRIC_ALIASES } from "./src/utils/metricAliasResolver.js";
+import { SYS } from "./src/data/groupsData.js";
 
 // Load variables from a local .env file into process.env (Node does not do this automatically).
 // Platforms like AI Studio/Vercel inject env vars directly, so a missing .env there is fine.
@@ -79,11 +80,12 @@ async function callGeminiWithFallbackAndRetry(
 ): Promise<any> {
   const modelsToTry = [
     params.model,
-    "gemini-3.8-flash",
+    "gemini-2.5-flash",
     "gemini-flash-latest",
+    "gemini-2.0-flash",
+    "gemini-3.8-flash",
     "gemini-3.1-flash-lite",
     "gemini-3.7-flash",
-    "gemini-2.5-flash",
   ].filter(Boolean);
 
   // Remove duplicates while preserving priority order
@@ -527,7 +529,7 @@ HỒ SƠ BỆNH NHÂN:
     };
 
     const response = await callGeminiWithFallbackAndRetry({
-      model: "gemini-3.8-flash",
+      model: "gemini-2.5-flash",
       contents: [filePart, promptPart],
       config: {
         responseMimeType: "application/json",
@@ -1022,15 +1024,15 @@ app.post("/api/analyze", async (req, res) => {
     });
   }
 
-  const selectedModel = model || "gemini-3.8-flash";
+  const selectedModel = model || "gemini-2.5-flash";
   const forceRefresh = !!req.body.forceRefresh;
 
   // Fast In-Memory Cache Check (skip if forceRefresh is true)
   const cacheKey = hashKey("analyze", { patient, vals, verifiedRecords, systemInstruction, selectedModel });
   if (!forceRefresh) {
     const cachedData = getCached(cacheKey);
-    if (cachedData && cachedData.text && cachedData.text.length >= 600) {
-      console.log("Serving clinical analysis report from high-speed memory cache.");
+    if (cachedData && cachedData.text && cachedData.text.length >= 1000 && (cachedData.text.includes("3. ☯️") || cachedData.text.includes("ĐÔNG Y") || cachedData.text.includes("Y HỌC CỔ TRUYỀN"))) {
+      console.log("Serving complete clinical analysis report (with YHCT) from high-speed memory cache.");
       if (stream) {
         res.setHeader("Content-Type", "text/plain; charset=utf-8");
         return res.send(cachedData.text);
@@ -1169,17 +1171,28 @@ LƯU Ý ĐẶC BIỆT VỀ CHỈ SỐ URO_U:
 - Đơn vị xét nghiệm chuẩn là µmol/L với khoảng sinh lý bình thường từ 0.0 - 16.0 µmol/L (hoặc < 16.9 µmol/L, nồng độ bài tiết chuẩn thông thường ~ 3.2 µmol/L).
 - Đánh giá là "Bình thường ✅" đối với các kết quả trong ngưỡng <= 16.9 µmol/L (hoặc định tính Neg/Normal). TUYỆT ĐỐI KHÔNG áp dụng dải mg/dL (0.2 - 1.0) để tránh báo động giả "Tăng cao".
 
-YÊU CẦU ĐẶC BIỆT BẮT BUỘC VỀ TÍNH HOÀN THIỆN ĐẦY ĐỦ CẢ 5 MỤC (ĐẶC BIỆT MỤC 4 & MỤC 5):
-Báo cáo BẮT BUỘC PHẢI VIẾT ĐẦY ĐỦ VÀ HOÀN CHỈNH TẤT CẢ 5 MỤC (Từ Mục 1 đến Mục 5), TUYỆT ĐỐI KHÔNG ĐƯỢC DỪNG LẠI HOẶC CẮT NGANG GIỮA CHỪNG.
-Tại Mục 2 và Mục 3: Viết cô đọng, súc tích, đi thẳng vào các chỉ số bất thường cốt lõi để đảm bảo dung lượng hoàn thành trọn vẹn Mục 4 và Mục 5.
-TẠI MỤC 5 (KHUYẾN NGHỊ Y KHOA CHUYÊN NGHIỆP & ĐỀ XUẤT CẬN LÂM SÀNG BỔ SUNG CHUYÊN SÂU):
-BẮT BUỘC ĐI SÂU, LÀM RÕ TẬN GỐC TỪNG XÉT NGHIỆM VÀ KỸ THUẬT CẬN LÂM SÀNG BỔ SUNG CỤ THỂ, TUYỆT ĐỐI KHÔNG NÓI CHUNG CHUNG ("cần làm thêm xét nghiệm").
-Phải chia thành 4 cấu phần phân tích chuẩn y khoa:
-A. Các xét nghiệm máu & nước tiểu chuyên sâu cần làm thêm (nêu rõ tên chỉ số, từ viết tắt chuẩn và mục đích y khoa tương ứng với các bất thường hiện có, ví dụ: HbA1c, tỷ số Albumin/Creatinin niệu UACR, eGFR, cặn Addis soi cặn lắng nước tiểu, cấy vi khuẩn & kháng sinh đồ, bộ virus viêm gan, bộ tự miễn...).
-B. Các thăm dò chẩn đoán hình ảnh & thăm dò chức năng cần thực hiện (Siêu âm hệ tiết niệu/ổ bụng tổng quát, Siêu âm tim Doppler, Điện tâm đồ ECG 12 chuyển đạo, FibroScan gan, Chụp CT/MRI, nội soi nếu cần...).
-C. Kế hoạch phân tầng ưu tiên & thời điểm thực hiện (Ưu tiên 1 cấp bách trong 24-48h, Ưu tiên 2 làm trong 1-2 tuần, Ưu tiên 3 theo dõi định kỳ sau 1-3 tháng).
-D. Đề xuất chuyên khoa bệnh viện cụ thể cần tới thăm khám trực tiếp.
+YÊU CẦU ĐẶC BIỆT BẮT BUỘC VỀ TÍNH HOÀN THIỆN ĐẦY ĐỦ CẢ 5 MỤC (ĐẶC BIỆT MỤC 3 VÀ MỤC 5):
+Báo cáo BẮT BUỘC PHẢI VIẾT ĐẦY ĐỦ VÀ HOÀN CHỈNH TẤT CẢ 5 MỤC THEO ĐÚNG TIÊU ĐỀ SAU, TUYỆT ĐỐI KHÔNG ĐƯỢC BỎ QUA HOẶC CẮT NGANG GIỮA CHỪNG:
+### 1. 📋 HỒ SƠ, CHẨN ĐOÁN & TỔNG QUAN LÂM SÀNG
+### 2. 🧪 BIỆN LUẬN CHI TIẾT THEO TÂY Y (Y HỌC HIỆN ĐẠI)
+### 3. ☯️ BIỆN CHỨNG LUẬN TRỊ THEO ĐÔNG Y (Y HỌC CỔ TRUYỀN)
+### 4. 🍲 CHẾ ĐỘ DINH DƯỠNG & DƯỢC LIỆU LÀNH TÍNH (GIAO THOA ĐÔNG - TÂY Y)
+### 5. 🏥 KHUYẾN NGHỊ Y KHOA CHUYÊN NGHIỆP & ĐỀ XUẤT CẬN LÂM SÀNG BỔ SUNG CHUYÊN SÂU
+
+LƯU Ý CỐT LÕI CHO MỤC 3 (ĐÔNG Y - Y HỌC CỔ TRUYỀN):
+- ĐÂY LÀ ĐẶC THÙ BẮT BUỘC CỦA HỆ THỐNG BỆNH VIỆN Y HỌC CỔ TRUYỀN, TUYỆT ĐỐI KHÔNG ĐƯỢC BỎ QUA!
+- Phải quy nạp toàn diện các bất thường cận lâm sàng sang Tạng Phủ (Tâm, Can, Tỳ, Phế, Thận), Bát Cương (Biểu - Lý, Hàn - Nhiệt, Hư - Thực, Âm - Dương), Thể Bệnh YHCT cụ thể (ví dụ: Can đởm thấp nhiệt, Thận âm hư, Thấp nhiệt tý, Thống phong trọc độc ứ trệ, Khí trệ huyết ứ...) và Pháp trị tương ứng.
+
+LƯU Ý CỐT LÕI CHO MỤC 5 (KHUYẾN NGHỊ Y KHOA & ĐỀ XUẤT XÉT NGHIỆM BỔ SUNG):
+- ĐI SÂU, LÀM RÕ TẬN GỐC TỪNG XÉT NGHIỆM VÀ KỸ THUẬT CẬN LÂM SÀNG CẦN BỔ SUNG, TUYỆT ĐỐI KHÔNG NÓI CHUNG CHUNG ("cần làm thêm xét nghiệm").
+- VỚI MỖI ĐỀ XUẤT XÉT NGHIỆM HOẶC THĂM DÒ HÌNH ẢNH, BẮT BUỘC PHẢI CÓ ĐẦY ĐỦ:
+  + Tên xét nghiệm (kèm từ viết tắt chuẩn).
+  + Chỉ số bất thường liên quan trực tiếp trên phiếu xét nghiệm của bệnh nhân.
+  + CHÚ THÍCH SỰ LIÊN QUAN LÂM SÀNG: Giải thích rõ ràng vì sao bất thường chỉ số đó cần chỉ định xét nghiệm này, và xét nghiệm này giúp ích gì cho chẩn đoán/tiên lượng/điều trị.
+  + Mức độ ưu tiên: Ưu tiên 1 (24-48h), Ưu tiên 2 (1-2 tuần), Ưu tiên 3 (Định kỳ).
 `;
+
+    const effectiveSystemInstruction = (systemInstruction && systemInstruction.length > 200) ? systemInstruction : SYS;
 
     if (stream) {
       // Set streaming headers for instant chunk delivery
@@ -1190,14 +1203,15 @@ D. Đề xuất chuyên khoa bệnh viện cụ thể cần tới thăm khám tr
 
       let accumulatedText = "";
       const client = getGeminiClient(customApiKey);
-      // Prioritize reliable, current models with high availability and quota
+      // Prioritize reliable, current models with high availability and speed
       const modelsToTry = [
         selectedModel,
-        "gemini-3.8-flash",
+        "gemini-2.5-flash",
         "gemini-flash-latest",
+        "gemini-2.0-flash",
+        "gemini-3.8-flash",
         "gemini-3.1-flash-lite",
         "gemini-3.7-flash",
-        "gemini-2.5-flash",
       ];
       const uniqueModels = Array.from(new Set(modelsToTry));
 
@@ -1205,7 +1219,7 @@ D. Đề xuất chuyên khoa bệnh viện cụ thể cần tới thăm khám tr
       for (const curModel of uniqueModels) {
         try {
           const config: any = {
-            systemInstruction: systemInstruction,
+            systemInstruction: effectiveSystemInstruction,
             temperature: 0.3,
             maxOutputTokens: 8192,
             thinkingConfig: { thinkingBudget: 0 },
@@ -1261,13 +1275,10 @@ D. Đề xuất chuyên khoa bệnh viện cụ thể cần tới thăm khám tr
         }
       }
 
-      // Only cache truly complete reports containing Section 4 & 5
-      const isCompleteReport = accumulatedText.length >= 1500 && (
-        accumulatedText.includes("5. 🏥") ||
-        accumulatedText.includes("KHUYẾN NGHỊ") ||
-        accumulatedText.includes("CẬN LÂM SÀNG BỔ SUNG") ||
-        accumulatedText.includes("XÉT NGHIỆM BỔ SUNG")
-      );
+      // Only cache truly complete reports containing Section 3 (YHCT) and Section 5
+      const hasYhct = accumulatedText.includes("3. ☯️") || accumulatedText.includes("ĐÔNG Y") || accumulatedText.includes("Y HỌC CỔ TRUYỀN");
+      const hasSection5 = accumulatedText.includes("5. 🏥") || accumulatedText.includes("KHUYẾN NGHỊ") || accumulatedText.includes("CẬN LÂM SÀNG BỔ SUNG") || accumulatedText.includes("XÉT NGHIỆM BỔ SUNG");
+      const isCompleteReport = accumulatedText.length >= 1200 && hasYhct && hasSection5;
       if (streamSuccess && isCompleteReport) {
         setCache(cacheKey, { text: accumulatedText });
       }
@@ -1282,7 +1293,7 @@ D. Đề xuất chuyên khoa bệnh viện cụ thể cần tới thăm khám tr
         model: selectedModel,
         contents: finalPrompt,
         config: {
-          systemInstruction: systemInstruction,
+          systemInstruction: effectiveSystemInstruction,
           temperature: 0.3,
           maxOutputTokens: 8192,
           thinkingConfig: { thinkingBudget: 0 },
